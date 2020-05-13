@@ -1,42 +1,7 @@
 [
   {
-    "key": "payment.console.info.email",
-    "value": "sao@bancore.com",
+    "key": "studio.secretingredients.info.email",
+    "value": "corbandalas@me.com",
     "description": "Email with information about new partner registration etc."
-  },
-  {
-    "key": "payment.console.info.email.from",
-    "value": "sao@bancore.com",
-    "description": "Email of sender mail notification"
-  },
-  {
-    "key": "payment.console.domain",
-    "value": "http://bancore.com",
-    "description": "Application domain name"
-  },
-  {
-    "key": "payment.console.api.domain",
-    "value": "https://kegow.bancore.com/getit/api",
-    "description": "API domain name"
-  },
-  {
-    "key": "payment.console.merchant.account.id",
-    "value": "26",
-    "description": "Payment console merchant account ID in API system"
-  },
-  {
-    "key": "payment.console.merchant.account.private.key",
-    "value": "C608FC2EFE27E094A5995343DE9885C2",
-    "description": "Payment console merchant account private key in API system"
-  },
-  {
-    "key": "payment.console.merchant.registration.country",
-    "value": "NG",
-    "description": "Payment console registration country for API"
-  },
-  {
-    "key": "payment.console.onecard.operators",
-    "value": "MTN-MTN;ETST-Etisalat;VISAF-VISAF;AIRT-AirTel;MLINK-MLINK;GLO-GLO",
-    "description": "One card operators"
   }
 ]

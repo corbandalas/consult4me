@@ -1,8 +1,8 @@
 package studio.secretingredients.consult4me.repository;
 
-import com.bancore.paymentconsole.domain.Property;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
+import studio.secretingredients.consult4me.domain.Property;
 
 
 /**

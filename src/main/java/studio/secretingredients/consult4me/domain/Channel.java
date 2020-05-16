@@ -11,7 +11,7 @@ import javax.persistence.*;
  * @since 0.1.0
  */
 @Data
-@Entity(name = "property")
+@Entity(name = "channel")
 public class Channel {
 
 	@Id

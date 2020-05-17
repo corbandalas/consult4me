@@ -16,9 +16,9 @@ import java.util.Set;
 @Data
 @Entity(name = "account")
 public class Account {
-    @Id
-	@GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Integer id;
+
+	@Id
+	private String email;
 
 	@Column
 	private String hashedPassword;
@@ -28,9 +28,6 @@ public class Account {
 
 	@Column
 	private String phoneNumber;
-
-	@Column
-    private String email;
 
 	@Column
 	private String privateKey;

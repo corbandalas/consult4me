@@ -14,5 +14,6 @@ import studio.secretingredients.consult4me.domain.Property;
  */
 
 @Repository
-public interface AccountRepository extends CrudRepository<Account, Integer> {
+public interface AccountRepository extends CrudRepository<Account, String> {
+    Account findAccountByEmail(String email);
 }

@@ -3,17 +3,17 @@ package studio.secretingredients.consult4me.repository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import studio.secretingredients.consult4me.domain.Account;
-import studio.secretingredients.consult4me.domain.Property;
+import studio.secretingredients.consult4me.domain.User;
 
 
 /**
- * Account repository interface
+ * User repository interface
  *
- * @author corbandalas - created 12.05.2020
+ * @author corbandalas - created 18.05.2020
  * @since 0.1.0
  */
 
 @Repository
-public interface AccountRepository extends CrudRepository<Account, Integer> {
-    Account findAccountById(Integer id);
+public interface UserRepository extends CrudRepository<User, String> {
+    User findUserByEmail(String email);
 }

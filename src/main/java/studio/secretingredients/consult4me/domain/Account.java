@@ -5,6 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -18,10 +19,7 @@ import java.util.Set;
 public class Account {
 
 	@Id
-	private String email;
-
-	@Column
-	private String hashedPassword;
+	private Integer id;
 
 	@Column
 	private String contactPersonName;
@@ -38,11 +36,8 @@ public class Account {
 	@Column
 	private Date registerDate;
 
-	@ElementCollection(targetClass = AdminRole.class)
-	@CollectionTable(name = "account_roles",
-			joinColumns = @JoinColumn(name = "account_id"))
-	@Column(name = "role")
-	@Enumerated(EnumType.STRING)
-	private Set<AdminRole> roles = new HashSet<>();
+	@OneToMany(cascade = {CascadeType.ALL }, fetch = FetchType.LAZY)
+	private List<User> users;
+
 }
 

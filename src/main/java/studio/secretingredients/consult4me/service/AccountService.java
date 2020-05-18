@@ -23,8 +23,8 @@ public class AccountService {
         return (List<Account>) accountRepository.findAll();
     }
 
-    public Account findAccountByEmail(String email) {
-        return accountRepository.findAccountByEmail(email);
+    public Account findAccountByID(Integer id) {
+        return accountRepository.findAccountById(id);
     }
 
     public Account save(Account account) {

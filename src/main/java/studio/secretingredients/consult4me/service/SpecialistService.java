@@ -19,6 +19,10 @@ public class SpecialistService {
     @Autowired
     SpecialistRepository specialistRepository;
 
+    public Specialist findSpecialistByEmail(String email) {
+        return specialistRepository.findById(email).get();
+    }
+
     public Specialist save(Specialist specialist) {
         return specialistRepository.save(specialist);
     }

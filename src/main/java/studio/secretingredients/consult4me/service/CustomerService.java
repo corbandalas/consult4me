@@ -17,6 +17,10 @@ public class CustomerService {
     @Autowired
     CustomerRepository customerRepository;
 
+    public Customer findCustomerByEmail(String email) {
+        return customerRepository.findById(email).get();
+    }
+
     public Customer save(Customer customer) {
         return customerRepository.save(customer);
     }

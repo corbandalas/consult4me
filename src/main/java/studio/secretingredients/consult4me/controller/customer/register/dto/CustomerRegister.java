@@ -3,6 +3,7 @@ package studio.secretingredients.consult4me.controller.customer.register.dto;
 import lombok.Data;
 import studio.secretingredients.consult4me.domain.Channel;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 
@@ -16,12 +17,19 @@ import java.util.List;
 @Data
 public class CustomerRegister {
 
+    @NotNull
     private String email;
+    @NotNull
     private String hashedPassword;
+    @NotNull
     private String phone;
+    @NotNull
     private String firstName;
+    @NotNull
     private String lastName;
+    @NotNull
     private String accountID;
+    @NotNull
     private String checkSum;
 
     private List<CustomerChannel> channels;

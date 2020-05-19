@@ -2,6 +2,8 @@ package studio.secretingredients.consult4me.controller.admin.login.dto;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Login DTO request object
  *
@@ -12,9 +14,13 @@ import lombok.Data;
 @Data
 public class UserLogin {
 
+    @NotNull
     private String accountID;
+    @NotNull
     private String login;
+    @NotNull
     private String hashedPassword;
+    @NotNull
     private String checkSum;
 
 }

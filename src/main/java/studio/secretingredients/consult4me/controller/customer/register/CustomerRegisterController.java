@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import studio.secretingredients.consult4me.controller.ResultCodes;
+import studio.secretingredients.consult4me.controller.customer.login.dto.CustomerLoginResponse;
 import studio.secretingredients.consult4me.controller.customer.register.dto.CustomerRegister;
 import studio.secretingredients.consult4me.controller.customer.register.dto.CustomerRegisterResponse;
 import studio.secretingredients.consult4me.domain.Account;
@@ -15,6 +16,7 @@ import studio.secretingredients.consult4me.domain.Channel;
 import studio.secretingredients.consult4me.domain.Customer;
 import studio.secretingredients.consult4me.service.AccountService;
 import studio.secretingredients.consult4me.service.CustomerService;
+import studio.secretingredients.consult4me.util.SecurityUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -59,6 +61,11 @@ public class CustomerRegisterController {
 
             if (customerService.findCustomerByEmail(customerRegister.getEmail()) != null) {
                 return new CustomerRegisterResponse(ResultCodes.ALREADY_REGISTERED);
+            }
+
+            if (!SecurityUtil.generateKeyFromArray(customerRegister.getAccountID(), customerRegister.getEmail(), customerRegister.getHashedPassword(), customerRegister.getPhone(),
+                    account.getPrivateKey()).equalsIgnoreCase(customerRegister.getCheckSum())) {
+                return new CustomerRegisterResponse(ResultCodes.WRONG_CHECKSUM);
             }
 
             Customer customer = new Customer();

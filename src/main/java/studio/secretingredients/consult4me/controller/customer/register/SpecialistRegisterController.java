@@ -17,6 +17,7 @@ import studio.secretingredients.consult4me.domain.*;
 import studio.secretingredients.consult4me.service.AccountService;
 import studio.secretingredients.consult4me.service.CustomerService;
 import studio.secretingredients.consult4me.service.SpecialistService;
+import studio.secretingredients.consult4me.util.SecurityUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -59,6 +60,7 @@ public class SpecialistRegisterController {
                 return new SpecialistRegisterResponse(ResultCodes.WRONG_REQUEST);
             }
 
+
             Account account = accountService.findAccountByID(Integer.parseInt(customerRegister.getAccountID()));
 
             if (account == null || !account.isActive()) {
@@ -68,6 +70,12 @@ public class SpecialistRegisterController {
             if (specialistService.findSpecialistByEmail(customerRegister.getEmail()) != null) {
                 return new SpecialistRegisterResponse(ResultCodes.ALREADY_REGISTERED);
             }
+
+            if (!SecurityUtil.generateKeyFromArray(customerRegister.getAccountID(), customerRegister.getEmail(), customerRegister.getHashedPassword(), customerRegister.getPhone(),
+                    account.getPrivateKey()).equalsIgnoreCase(customerRegister.getCheckSum())) {
+                return new SpecialistRegisterResponse(ResultCodes.WRONG_CHECKSUM);
+            }
+
 
             Specialist specialist = new Specialist();
 

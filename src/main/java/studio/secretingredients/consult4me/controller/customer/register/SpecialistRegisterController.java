@@ -1,5 +1,7 @@
 package studio.secretingredients.consult4me.controller.customer.register;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
@@ -38,6 +40,9 @@ public class SpecialistRegisterController {
 
     @PostMapping(
             value = "/specialist/register", consumes = "application/json", produces = "application/json")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(value = "SHA256(accountID+email+phone+hashedPassword+phone+privateKey)"
+                    , name = "checksum")})
     public SpecialistRegisterResponse login(@RequestBody SpecialistRegister customerRegister) {
 
         try {

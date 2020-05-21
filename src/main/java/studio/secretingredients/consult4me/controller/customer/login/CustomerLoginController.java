@@ -38,8 +38,8 @@ public class CustomerLoginController {
     @PostMapping(
             value = "/customer/login", consumes = "application/json", produces = "application/json")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(value = "SHA256(accountId+orderId+phone+firstName+lastName+amount+currency+email+secret)",
-                    required = true, dataType = "String", paramType = "body", name = "checksum")})
+            @ApiImplicitParam(value = "SHA256(accountID+login+phone+hashedPassword+privateKey)"
+                    , name = "checksum")})
     public CustomerLoginResponse login(@RequestBody CustomerLogin userLogin) {
 
         try {

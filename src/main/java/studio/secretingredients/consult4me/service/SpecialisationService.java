@@ -7,6 +7,8 @@ import studio.secretingredients.consult4me.domain.Specialisation;
 import studio.secretingredients.consult4me.repository.SessionRepository;
 import studio.secretingredients.consult4me.repository.SpecialisationRepository;
 
+import java.util.List;
+
 /**
  * Specialisation service
  *
@@ -18,6 +20,10 @@ public class SpecialisationService {
 
     @Autowired
     SpecialisationRepository specialisationRepository;
+
+    public List<Specialisation> findAll() {
+        return (List<Specialisation>) specialisationRepository.findAll();
+    }
 
     public Specialisation save(Specialisation session) {
         return specialisationRepository.save(session);

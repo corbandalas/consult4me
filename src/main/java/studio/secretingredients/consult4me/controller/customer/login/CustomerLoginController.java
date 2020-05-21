@@ -1,5 +1,7 @@
 package studio.secretingredients.consult4me.controller.customer.login;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
@@ -35,6 +37,9 @@ public class CustomerLoginController {
 
     @PostMapping(
             value = "/customer/login", consumes = "application/json", produces = "application/json")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(value = "SHA256(accountId+orderId+phone+firstName+lastName+amount+currency+email+secret)",
+                    required = true, dataType = "String", paramType = "body", name = "checksum")})
     public CustomerLoginResponse login(@RequestBody CustomerLogin userLogin) {
 
         try {

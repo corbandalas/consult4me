@@ -23,6 +23,7 @@ import studio.secretingredients.consult4me.util.SecurityUtil;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -40,7 +41,7 @@ public class CustomerRegisterController {
     @PostMapping(
             value = "/customer/register", consumes = "application/json", produces = "application/json")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(value = "SHA256(accountID+email+phone+hashedPassword+phone+privateKey)"
+            @ApiImplicitParam(value = "SHA256(accountID+email+hashedPassword+phone+privateKey)"
                     , name = "checksum")})
     public CustomerRegisterResponse login(@RequestBody CustomerRegister customerRegister) {
 
@@ -63,8 +64,9 @@ public class CustomerRegisterController {
                 return new CustomerRegisterResponse(ResultCodes.WRONG_ACCOUNT);
             }
 
+            Optional<Customer> customerByEmail = customerService.findCustomerByEmail(customerRegister.getEmail());
 
-            if (customerService.findCustomerByEmail(customerRegister.getEmail()) != null) {
+            if (customerByEmail.isPresent()) {
                 return new CustomerRegisterResponse(ResultCodes.ALREADY_REGISTERED);
             }
 

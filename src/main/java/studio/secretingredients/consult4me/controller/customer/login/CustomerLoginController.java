@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import studio.secretingredients.consult4me.CacheProvider;
-import studio.secretingredients.consult4me.authorization.CustomerToken;
+import studio.secretingredients.consult4me.authorization.customer.CustomerToken;
 import studio.secretingredients.consult4me.controller.ResultCodes;
 import studio.secretingredients.consult4me.controller.customer.login.dto.CustomerLogin;
 import studio.secretingredients.consult4me.controller.customer.login.dto.CustomerLoginResponse;
@@ -21,6 +21,7 @@ import studio.secretingredients.consult4me.service.CustomerService;
 import studio.secretingredients.consult4me.util.SecurityUtil;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -58,9 +59,15 @@ public class CustomerLoginController {
                 return new CustomerLoginResponse(ResultCodes.WRONG_ACCOUNT, null);
             }
 
-            Customer customer = customerService.findCustomerByEmail(userLogin.getLogin());
+            Optional<Customer> customerByEmail = customerService.findCustomerByEmail(userLogin.getLogin());
 
-            if (customer == null || !customer.isActive()) {
+            if (!customerByEmail.isPresent()) {
+                return new CustomerLoginResponse(ResultCodes.WRONG_USER, null);
+            }
+
+            Customer customer = customerByEmail.get();
+
+            if (!customer.isActive()) {
                 return new CustomerLoginResponse(ResultCodes.WRONG_USER, null);
             }
 

@@ -9,21 +9,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import studio.secretingredients.consult4me.authorization.SpecialistToken;
 import studio.secretingredients.consult4me.controller.ResultCodes;
-import studio.secretingredients.consult4me.controller.customer.register.dto.CustomerRegister;
-import studio.secretingredients.consult4me.controller.customer.register.dto.CustomerRegisterResponse;
 import studio.secretingredients.consult4me.controller.customer.register.dto.SpecialistRegister;
 import studio.secretingredients.consult4me.controller.customer.register.dto.SpecialistRegisterResponse;
 import studio.secretingredients.consult4me.domain.*;
 import studio.secretingredients.consult4me.service.AccountService;
-import studio.secretingredients.consult4me.service.CustomerService;
 import studio.secretingredients.consult4me.service.SpecialistService;
 import studio.secretingredients.consult4me.util.SecurityUtil;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -72,7 +69,9 @@ public class SpecialistRegisterController {
                 return new SpecialistRegisterResponse(ResultCodes.WRONG_ACCOUNT);
             }
 
-            if (specialistService.findSpecialistByEmail(customerRegister.getEmail()) != null) {
+            Optional<Specialist> specialistByEmail = specialistService.findSpecialistByEmail(customerRegister.getEmail());
+
+            if (specialistByEmail.isPresent()) {
                 return new SpecialistRegisterResponse(ResultCodes.ALREADY_REGISTERED);
             }
 

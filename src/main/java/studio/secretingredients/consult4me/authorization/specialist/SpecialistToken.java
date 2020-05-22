@@ -1,4 +1,4 @@
-package studio.secretingredients.consult4me.authorization;
+package studio.secretingredients.consult4me.authorization.specialist;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -5,9 +5,9 @@ import org.apache.commons.jcs.JCS;
 import org.apache.commons.jcs.access.CacheAccess;
 import org.apache.commons.jcs.engine.control.CompositeCacheManager;
 import org.springframework.stereotype.Component;
-import studio.secretingredients.consult4me.authorization.AdminUserToken;
-import studio.secretingredients.consult4me.authorization.CustomerToken;
-import studio.secretingredients.consult4me.authorization.SpecialistToken;
+import studio.secretingredients.consult4me.authorization.admin.AdminUserToken;
+import studio.secretingredients.consult4me.authorization.customer.CustomerToken;
+import studio.secretingredients.consult4me.authorization.specialist.SpecialistToken;
 
 import javax.annotation.PostConstruct;
 

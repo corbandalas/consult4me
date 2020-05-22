@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import studio.secretingredients.consult4me.domain.Customer;
 import studio.secretingredients.consult4me.repository.CustomerRepository;
 
+import java.util.Optional;
+
 /**
  * Customer service
  *
@@ -17,8 +19,8 @@ public class CustomerService {
     @Autowired
     CustomerRepository customerRepository;
 
-    public Customer findCustomerByEmail(String email) {
-        return customerRepository.findById(email).get();
+    public Optional<Customer> findCustomerByEmail(String email) {
+        return customerRepository.findById(email);
     }
 
     public Customer save(Customer customer) {

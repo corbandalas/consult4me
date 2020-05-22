@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
-import studio.secretingredients.consult4me.authorization.Authorized;
+import studio.secretingredients.consult4me.authorization.admin.AdminUserAuthorized;
 import studio.secretingredients.consult4me.domain.Property;
 import studio.secretingredients.consult4me.service.PropertyService;
 
@@ -19,7 +19,7 @@ public class PropertyController {
 
     @PostMapping(
             value = "/listProperty", produces = "application/json")
-    @Authorized
+    @AdminUserAuthorized
     public List<Property> list(@RequestHeader HttpHeaders headers) {
 
         return propertyService.findAll();

@@ -1,4 +1,4 @@
-package studio.secretingredients.consult4me.authorization;
+package studio.secretingredients.consult4me.authorization.admin;
 
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -9,22 +9,21 @@ import javax.servlet.http.HttpServletRequest;
 
 @Aspect
 @Configuration
-public class AuthAspect {
+public class AdminUserAuthAspect {
     @Autowired
-    AuthorizationBean authBean;
+    AdminUserAuthorizationBean adminUserAuthorizationBean;
 
-    @Before("@annotation(studio.secretingredients.consult4me.authorization.Authorized) && args(request,..)")
+    @Before("@annotation(studio.secretingredients.consult4me.authorization.admin.AdminUserAuthorized) && args(request,..)")
     public void before(HttpServletRequest request) {
         if (!(request instanceof HttpServletRequest)) {
             throw
                     new RuntimeException("request should be HttpServletRequesttype");
         }
 
-        if (authBean.authorize(request.getHeader("Authorization"))) {
-            request.setAttribute(
-                    "userSession",
-                    "session information which cann be acces in controller"
-            );
+        AdminUserToken authorization = adminUserAuthorizationBean.authorize(request.getHeader("Authorization"));
+
+        if (authorization != null) {
+            request.setAttribute("userSession", authorization);
         } else {
             throw new RuntimeException("auth error..!!!");
         }

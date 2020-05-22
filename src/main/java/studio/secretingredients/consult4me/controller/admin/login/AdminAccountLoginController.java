@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import studio.secretingredients.consult4me.CacheProvider;
-import studio.secretingredients.consult4me.authorization.AdminUserToken;
+import studio.secretingredients.consult4me.authorization.admin.AdminUserToken;
 import studio.secretingredients.consult4me.controller.ResultCodes;
 import studio.secretingredients.consult4me.controller.admin.login.dto.UserLogin;
 import studio.secretingredients.consult4me.controller.admin.login.dto.UserLoginResponse;

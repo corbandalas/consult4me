@@ -1,15 +1,15 @@
 package studio.secretingredients.consult4me.controller.admin.property;
 
-import io.netty.handler.codec.http.HttpHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import studio.secretingredients.consult4me.authorization.admin.AdminUserAuthorized;
-import studio.secretingredients.consult4me.domain.Property;
+import studio.secretingredients.consult4me.controller.ResultCodes;
+import studio.secretingredients.consult4me.controller.admin.property.dto.PropertyList;
+import studio.secretingredients.consult4me.controller.admin.property.dto.PropertyListResponse;
+import studio.secretingredients.consult4me.domain.AdminRole;
 import studio.secretingredients.consult4me.service.PropertyService;
-
-import java.util.List;
 
 @RestController
 public class PropertyController {
@@ -18,12 +18,15 @@ public class PropertyController {
     PropertyService propertyService;
 
     @PostMapping(
-            value = "/listProperty", produces = "application/json")
-    @AdminUserAuthorized
-    public List<Property> list(@RequestHeader HttpHeaders headers) {
+            value = "/admin/listProperty", consumes = "application/json", produces = "application/json")
+    @AdminUserAuthorized(requiredRoles = {
+            AdminRole.ROLE_ADMIN_PROPERTY_LIST
+    })
+    public PropertyListResponse list(@RequestBody PropertyList request) {
 
-        return propertyService.findAll();
+        return new PropertyListResponse(ResultCodes.OK_RESPONSE, propertyService.findAll());
     }
+
 }
 
 

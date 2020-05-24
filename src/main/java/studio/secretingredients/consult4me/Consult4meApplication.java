@@ -2,6 +2,7 @@ package studio.secretingredients.consult4me;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 
 /**
@@ -12,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 
 @SpringBootApplication
+@EnableAspectJAutoProxy
 public class Consult4meApplication {
 
 	public static void main(String[] args) {

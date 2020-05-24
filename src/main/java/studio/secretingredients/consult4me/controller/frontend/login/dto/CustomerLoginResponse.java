@@ -1,8 +1,7 @@
-package studio.secretingredients.consult4me.controller.admin.login.dto;
+package studio.secretingredients.consult4me.controller.frontend.login.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import studio.secretingredients.consult4me.domain.User;
 
 /**
  * Login DTO response object
@@ -13,10 +12,9 @@ import studio.secretingredients.consult4me.domain.User;
 
 @Data
 @AllArgsConstructor
-public class UserLoginResponse {
+public class CustomerLoginResponse {
 
     private String result;
     private String token;
-    private User user;
 
 }

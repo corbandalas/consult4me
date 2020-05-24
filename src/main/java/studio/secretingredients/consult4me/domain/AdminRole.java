@@ -8,8 +8,16 @@ package studio.secretingredients.consult4me.domain;
  */
 public enum AdminRole {
 
-    ROLE_CUSTOMER_LOGIN("Allow account to authorize customers"),
-
+    ROLE_ADMIN_PROPERTY_LIST("Allows to view property list"),
+    ROLE_ADMIN_ACCOUNT_LIST("Allows to view account list"),
+    ROLE_ADMIN_ACCOUNT_CREATE("Allows to create account"),
+    ROLE_ADMIN_ACCOUNT_UPDATE("Allows to update account"),
+    ROLE_ADMIN_ACCOUNT_GET("Allows to get account data"),
+    ROLE_ADMIN_USER_LIST("Allows to view user list"),
+    ROLE_ADMIN_USER_CREATE("Allows to create user"),
+    ROLE_ADMIN_USER_UPDATE("Allows to update user"),
+    ROLE_ADMIN_USER_GET("Allows to get user data"),
+    ROLE_ADMIN_USER_GET_ALL_ROLES("Allows to get all roles data")
     ;
 
     private String value;

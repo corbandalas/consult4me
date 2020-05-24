@@ -1,33 +1,75 @@
 package studio.secretingredients.consult4me.authorization.specialist;
 
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import studio.secretingredients.consult4me.CacheProvider;
+import studio.secretingredients.consult4me.controller.BaseTokenRequest;
+import studio.secretingredients.consult4me.domain.Account;
+import studio.secretingredients.consult4me.domain.Specialist;
+import studio.secretingredients.consult4me.service.AccountService;
+import studio.secretingredients.consult4me.service.SpecialistService;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+import java.util.Optional;
 
 @Aspect
 @Configuration
 public class SpecialistAuthAspect {
+
     @Autowired
-    SpecialistAuthorizationBean specialistAuthorizationBean;
+    AccountService accountService;
+
+    @Autowired
+    SpecialistService specialistService;
+
+    @Autowired
+    CacheProvider cacheProvider;
 
     @Before("@annotation(studio.secretingredients.consult4me.authorization.specialist.SpecialistAuthorized) && args(request,..)")
-    public void before(HttpServletRequest request) {
-        if (!(request instanceof HttpServletRequest)) {
+    public void before(JoinPoint joinPoint, BaseTokenRequest request) {
+
+        if (!(request instanceof BaseTokenRequest)) {
             throw
-                    new RuntimeException("request should be HttpServletRequesttype");
+                    new RuntimeException("Request should be BaseTokenRequest");
         }
 
-        SpecialistToken authorization = specialistAuthorizationBean.authorize(request.getHeader("Authorization"));
+        SpecialistToken authorization = authorize(request.getToken());
 
-        if (authorization != null) {
-            request.setAttribute("userSession", authorization);
-        } else {
-            throw new RuntimeException("auth error..!!!");
+        if (authorization == null) {
+            throw new RuntimeException("Authorization Token was not found !!!");
+        }
+
+        Account accountByID = accountService.findAccountByID(authorization.getAccount().getId());
+
+        if (accountByID != null && !accountByID.isActive()) {
+            throw new RuntimeException("Account #" + accountByID.getId() + " is not active");
+        }
+
+        Optional<Specialist> customerByEmail = specialistService.findSpecialistByEmail(authorization.getSpecialist().getEmail());
+
+        if (!customerByEmail.isPresent()) {
+            throw new RuntimeException("Specialist # " + authorization.getSpecialist().getEmail() + " is not present");
+        }
+
+
+        if (customerByEmail.get() != null && !customerByEmail.get().isActive()) {
+            throw new RuntimeException("Customer # " + authorization.getSpecialist().getEmail() + " is not active");
+        }
+
+        if ((System.currentTimeMillis() - authorization.getAuthorizeDate().getTime()) <= 1000 * 60 * 15) {
+            authorization.setAuthorizeDate(new Date());
+            cacheProvider.putSpecialistToken(request.getToken(), authorization);
         }
 
     }
+
+
+    public SpecialistToken authorize(String token) {
+        return cacheProvider.getSpecialistToken(token);
+    }
+
 
 }

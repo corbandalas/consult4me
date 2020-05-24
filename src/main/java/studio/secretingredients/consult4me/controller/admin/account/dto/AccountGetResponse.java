@@ -1,19 +1,16 @@
-package studio.secretingredients.consult4me.authorization.admin;
+package studio.secretingredients.consult4me.controller.admin.account.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import studio.secretingredients.consult4me.domain.Account;
 import studio.secretingredients.consult4me.domain.User;
 
-import java.util.Date;
-
 @Data
 @AllArgsConstructor
-public class AdminUserToken {
+public class AccountGetResponse {
 
-    private String token;
-    private User user;
-    private Date authorizeDate;
+    private String result;
+
     private Account account;
 
 }

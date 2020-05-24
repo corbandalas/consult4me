@@ -48,40 +48,44 @@ public class AdminAccountLoginController {
                     || StringUtils.isBlank(userLogin.getCheckSum())
                     || StringUtils.isBlank(userLogin.getLogin())
             ) {
-                return new UserLoginResponse(ResultCodes.WRONG_REQUEST, null);
+                return new UserLoginResponse(ResultCodes.WRONG_REQUEST, null, null);
             }
 
             Account account = accountService.findAccountByID(Integer.parseInt(userLogin.getAccountID()));
 
             if (account == null || !account.isActive()) {
-                return new UserLoginResponse(ResultCodes.WRONG_ACCOUNT, null);
+                return new UserLoginResponse(ResultCodes.WRONG_ACCOUNT, null, null);
             }
 
             User user = userService.findUserByID(userLogin.getLogin());
 
             if (user == null || !user.isActive()) {
-                return new UserLoginResponse(ResultCodes.WRONG_USER, null);
+                return new UserLoginResponse(ResultCodes.WRONG_USER, null, null);
             }
 
             if (!userLogin.getHashedPassword().equalsIgnoreCase(user.getHashedPassword())) {
-                return new UserLoginResponse(ResultCodes.WRONG_USER_PASSWORD, null);
+                return new UserLoginResponse(ResultCodes.WRONG_USER_PASSWORD, null, null);
             }
 
             if (!SecurityUtil.generateKeyFromArray(userLogin.getAccountID(), userLogin.getLogin(), userLogin.getHashedPassword(),
                     account.getPrivateKey()).equalsIgnoreCase(userLogin.getCheckSum())) {
-                return new UserLoginResponse(ResultCodes.WRONG_CHECKSUM, null);
+                return new UserLoginResponse(ResultCodes.WRONG_CHECKSUM, null, null);
+            }
+
+            if (!account.getUsers().contains(user)) {
+                return new UserLoginResponse(ResultCodes.WRONG_USER, null, null);
             }
 
             String token = RandomStringUtils.randomAlphanumeric(20);
 
-            AdminUserToken adminUserToken = new AdminUserToken(token, user, new Date());
+            AdminUserToken adminUserToken = new AdminUserToken(token, user, new Date(), account);
 
             cacheProvider.putAdminUserToken(token, adminUserToken);
 
-            return new UserLoginResponse(ResultCodes.OK_RESPONSE, token);
+            return new UserLoginResponse(ResultCodes.OK_RESPONSE, token, user);
         } catch (Exception e) {
             log.error("Admin login controller error", e);
-            return new UserLoginResponse(ResultCodes.GENERAL_ERROR, null);
+            return new UserLoginResponse(ResultCodes.GENERAL_ERROR, null, null);
         }
     }
 }

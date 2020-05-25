@@ -65,9 +65,12 @@ public class CustomerRegisterController {
 
             Optional<Customer> customerByEmail = customerService.findCustomerByEmail(customerRegister.getEmail());
 
+
             if (customerByEmail.isPresent()) {
                 return new CustomerRegisterResponse(ResultCodes.ALREADY_REGISTERED);
             }
+
+            log.info("Customer from db = " + customerByEmail.get());
 
             if (!SecurityUtil.generateKeyFromArray(customerRegister.getAccountID(), customerRegister.getEmail(), customerRegister.getHashedPassword(), customerRegister.getPhone(),
                     account.getPrivateKey()).equalsIgnoreCase(customerRegister.getCheckSum())) {

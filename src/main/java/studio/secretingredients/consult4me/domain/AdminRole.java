@@ -17,7 +17,8 @@ public enum AdminRole {
     ROLE_ADMIN_USER_CREATE("Allows to create user"),
     ROLE_ADMIN_USER_UPDATE("Allows to update user"),
     ROLE_ADMIN_USER_GET("Allows to get user data"),
-    ROLE_ADMIN_USER_GET_ALL_ROLES("Allows to get all roles data")
+    ROLE_ADMIN_USER_GET_ALL_ROLES("Allows to get all roles data"),
+    ROLE_ADMIN_USER_ADD_TO_ACCOUNT("Allows to all user to account")
     ;
 
     private String value;

@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import studio.secretingredients.consult4me.authorization.admin.AdminUserAuthorized;
 import studio.secretingredients.consult4me.controller.ResultCodes;
+import studio.secretingredients.consult4me.controller.admin.account.dto.AccountGetResponse;
 import studio.secretingredients.consult4me.controller.admin.user.dto.*;
+import studio.secretingredients.consult4me.domain.Account;
 import studio.secretingredients.consult4me.domain.AdminRole;
 import studio.secretingredients.consult4me.domain.User;
 import studio.secretingredients.consult4me.service.AccountService;
@@ -133,6 +135,40 @@ public class UserController {
         }
 
         return new UserCreateResponse(ResultCodes.GENERAL_ERROR, null);
+    }
+
+    @PostMapping(
+            value = "/admin/addUserToAccount", consumes = "application/json", produces = "application/json")
+    @AdminUserAuthorized(requiredRoles = {
+            AdminRole.ROLE_ADMIN_USER_ADD_TO_ACCOUNT
+    })
+    public AccountGetResponse addUser(@RequestBody UserAddToAccount request) {
+
+        try {
+
+            User userByID = userService.findUserByID(request.getEmail());
+
+            Account accountByID = accountService.findAccountByID(request.getId());
+
+            if (userByID == null) {
+                return new AccountGetResponse(ResultCodes.WRONG_USER, null);
+            }
+
+            if (accountByID == null) {
+                return new AccountGetResponse(ResultCodes.WRONG_ACCOUNT, null);
+            }
+
+            if (!accountByID.getUsers().contains(userByID)) {
+                accountByID.getUsers().add(userByID);
+                Account save = accountService.save(accountByID);
+
+                return new AccountGetResponse(ResultCodes.OK_RESPONSE, save);
+            }
+
+        } catch (Exception e) {
+            log.error("UserController", e);
+        }
+        return new AccountGetResponse(ResultCodes.GENERAL_ERROR, null);
     }
 
 }

@@ -79,6 +79,12 @@ public class UserController {
             return new UserCreateResponse(ResultCodes.WRONG_REQUEST, null);
         }
 
+        User userByID = userService.findUserByID(request.getEmail());
+
+        if (userByID != null) {
+            return new UserCreateResponse(ResultCodes.WRONG_USER, null);
+        }
+
         User user = new User();
 
         user.setActive(true);

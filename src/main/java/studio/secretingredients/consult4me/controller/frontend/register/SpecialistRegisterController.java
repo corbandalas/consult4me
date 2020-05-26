@@ -53,7 +53,7 @@ public class SpecialistRegisterController {
                     || StringUtils.isBlank(customerRegister.getDescriptionShort())
                     || StringUtils.isBlank(customerRegister.getEducation())
                     || StringUtils.isBlank(customerRegister.getPan())
-                    || customerRegister.getPriceHour() < 0
+                    || customerRegister.getPriceHour() <= 0
                     || StringUtils.isBlank(customerRegister.getCurrency())
                     || StringUtils.isBlank(customerRegister.getSocialProfile())
                     || StringUtils.isBlank(customerRegister.getFirstName())
@@ -110,18 +110,9 @@ public class SpecialistRegisterController {
             specialist.setPhone(customerRegister.getPhone());
             specialist.setRegistrationDate(new Date());
 
-            List<Specialisation> list = new ArrayList<>();
-
-            for (SpecialistSpecialisation specialistSpecialisation: customerRegister.getSpecialisations()) {
-                Specialisation specialisation = new Specialisation();
-
-                specialisation.setSpecialisationCategory(specialistSpecialisation.getSpecialisationCategory());
-                specialisation.setSpecialisationType(specialistSpecialisation.getSpecialisationType());
-
-                list.add(specialisation);
+            if (customerRegister.getSpecialisations() != null && customerRegister.getSpecialisations().size() > 0) {
+                specialist.setSpecialisations(customerRegister.getSpecialisations());
             }
-
-            specialist.setSpecialisations(list);
 
             specialistService.save(specialist);
 

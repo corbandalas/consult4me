@@ -1,6 +1,7 @@
 package studio.secretingredients.consult4me.controller.frontend.register.dto;
 
 import lombok.Data;
+import studio.secretingredients.consult4me.domain.Specialisation;
 
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -48,7 +49,7 @@ public class SpecialistRegister {
     @NotNull
     private String pan;
     @NotNull
-    private List<SpecialistSpecialisation> specialisations;
+    private List<Specialisation> specialisations;
     @NotNull
     private String accountID;
     @NotNull

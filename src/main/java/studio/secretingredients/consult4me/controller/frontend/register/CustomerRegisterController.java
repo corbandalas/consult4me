@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import studio.secretingredients.consult4me.controller.ResultCodes;
+import studio.secretingredients.consult4me.controller.frontend.register.dto.CustomerChannel;
 import studio.secretingredients.consult4me.controller.frontend.register.dto.CustomerRegister;
 import studio.secretingredients.consult4me.controller.frontend.register.dto.CustomerRegisterResponse;
 import studio.secretingredients.consult4me.domain.Account;
@@ -96,16 +97,16 @@ public class CustomerRegisterController {
             List<Channel> list = new ArrayList<>();
 
             if (customerRegister.getChannels() != null && customerRegister.getChannels().size() > 0) {
-                customerRegister.getChannels().stream().map(res -> {
+
+                for (CustomerChannel customerChannel : customerRegister.getChannels()) {
                     Channel channel = new Channel();
 
-                    channel.setChannelCategory(res.getChannelCategory());
-                    channel.setAccount(res.getAccount());
+                    channel.setChannelCategory(customerChannel.getChannelCategory());
+                    channel.setAccount(customerChannel.getAccount());
 
                     list.add(channel);
+                }
 
-                    return channel;
-                });
             }
 
             log.info("List of channels size " + list.size());

@@ -41,7 +41,7 @@ public class CustomerRegisterController {
     @PostMapping(
             value = "/frontend/customer/register", consumes = "application/json", produces = "application/json")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(value = "SHA256(accountID+email++phone+privateKey)"
+            @ApiImplicitParam(value = "SHA256(accountID+email+phone+privateKey)"
                     , name = "checksum")})
     public CustomerRegisterResponse login(@RequestBody CustomerRegister customerRegister) {
 
@@ -85,7 +85,7 @@ public class CustomerRegisterController {
             customer.setLastName(customerRegister.getLastName());
 
             String generatedPassword = RandomStringUtils.randomNumeric(6);
-            customer.setHashedPassword(generatedPassword);
+            customer.setHashedPassword(SecurityUtil.generateKeyFromArray(generatedPassword));
 
             log.info("Generated password for customer [" + customerRegister.getEmail() + "] = " + generatedPassword);
 

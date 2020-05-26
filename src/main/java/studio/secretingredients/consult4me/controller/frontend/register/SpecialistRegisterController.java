@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import studio.secretingredients.consult4me.controller.ResultCodes;
 import studio.secretingredients.consult4me.controller.frontend.register.dto.SpecialistRegister;
 import studio.secretingredients.consult4me.controller.frontend.register.dto.SpecialistRegisterResponse;
+import studio.secretingredients.consult4me.controller.frontend.register.dto.SpecialistSpecialisation;
 import studio.secretingredients.consult4me.domain.*;
 import studio.secretingredients.consult4me.service.AccountService;
 import studio.secretingredients.consult4me.service.SpecialistService;
@@ -38,7 +39,7 @@ public class SpecialistRegisterController {
     @PostMapping(
             value = "/frontend/specialist/register", consumes = "application/json", produces = "application/json")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(value = "SHA256(accountID+email+phone++phone+privateKey)"
+            @ApiImplicitParam(value = "SHA256(accountID+email+phone+privateKey)"
                     , name = "checksum")})
     public SpecialistRegisterResponse login(@RequestBody SpecialistRegister customerRegister) {
 
@@ -100,9 +101,9 @@ public class SpecialistRegisterController {
             specialist.setPan(customerRegister.getPan());
 
             String generatedPassword = RandomStringUtils.randomNumeric(6);
-            specialist.setHashedPassword(generatedPassword);
+            specialist.setHashedPassword(SecurityUtil.generateKeyFromArray(generatedPassword));
 
-            log.info("Generated password for customer [" + customerRegister.getEmail() + "] = " + generatedPassword);
+            log.info("Generated password for specialist [" + customerRegister.getEmail() + "] = " + generatedPassword);
 
             //TODO: Sending SMS/email with generated password
 
@@ -111,17 +112,13 @@ public class SpecialistRegisterController {
 
             List<Specialisation> list = new ArrayList<>();
 
-            if (customerRegister.getSpecialisations() != null && customerRegister.getSpecialisations().size() > 0) {
-                customerRegister.getSpecialisations().stream().map(res -> {
-                    Specialisation specialisation = new Specialisation();
+            for (SpecialistSpecialisation specialistSpecialisation: customerRegister.getSpecialisations()) {
+                Specialisation specialisation = new Specialisation();
 
-                    specialisation.setSpecialisationCategory(res.getSpecialisationCategory());
-                    specialisation.setSpecialisationType(res.getSpecialisationType());
+                specialisation.setSpecialisationCategory(specialistSpecialisation.getSpecialisationCategory());
+                specialisation.setSpecialisationType(specialistSpecialisation.getSpecialisationType());
 
-                    list.add(specialisation);
-
-                    return specialisation;
-                });
+                list.add(specialisation);
             }
 
             specialist.setSpecialisations(list);

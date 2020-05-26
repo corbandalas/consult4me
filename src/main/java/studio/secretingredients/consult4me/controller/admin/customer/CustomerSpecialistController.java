@@ -6,11 +6,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import studio.secretingredients.consult4me.CacheProvider;
+import studio.secretingredients.consult4me.authorization.admin.AdminUserAuthorized;
 import studio.secretingredients.consult4me.authorization.customer.CustomerAuthorized;
 import studio.secretingredients.consult4me.controller.ResultCodes;
 import studio.secretingredients.consult4me.controller.admin.customer.dto.CustomerSpecialistList;
 import studio.secretingredients.consult4me.controller.admin.customer.dto.CustomerListResponse;
 import studio.secretingredients.consult4me.controller.admin.customer.dto.SpecialistListResponse;
+import studio.secretingredients.consult4me.domain.AdminRole;
 import studio.secretingredients.consult4me.service.AccountService;
 import studio.secretingredients.consult4me.service.CustomerService;
 import studio.secretingredients.consult4me.service.SpecialisationService;
@@ -38,7 +40,9 @@ public class CustomerSpecialistController {
 
     @PostMapping(
             value = "/admin/specialist/list", consumes = "application/json", produces = "application/json")
-    @CustomerAuthorized
+    @AdminUserAuthorized(requiredRoles = {
+            AdminRole.ROLE_ADMIN_SPECIALIST_LIST
+    })
     public SpecialistListResponse specialistList(@RequestBody CustomerSpecialistList request) {
 
         return new SpecialistListResponse(ResultCodes.OK_RESPONSE, specialistService.findAll());
@@ -46,7 +50,9 @@ public class CustomerSpecialistController {
 
     @PostMapping(
             value = "/admin/customer/list", consumes = "application/json", produces = "application/json")
-    @CustomerAuthorized
+    @AdminUserAuthorized(requiredRoles = {
+            AdminRole.ROLE_ADMIN_CUSTOMER_LIST
+    })
     public CustomerListResponse customerList(@RequestBody CustomerSpecialistList request) {
 
         return new CustomerListResponse(ResultCodes.OK_RESPONSE, customerService.findAll());

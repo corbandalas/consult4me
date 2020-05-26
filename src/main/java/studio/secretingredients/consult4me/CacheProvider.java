@@ -30,6 +30,8 @@ public class CacheProvider {
         compositeCacheManager.configure();
 
         adminUsertokenCache = JCS.getInstance("adminUsertokenCache");
+        customerCache = JCS.getInstance("customerCache");
+        specialistCache = JCS.getInstance("specialistCache");
         defaultCache = JCS.getInstance("defaultCache");
 
     }

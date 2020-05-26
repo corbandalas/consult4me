@@ -53,7 +53,7 @@ public class SpecialistRegisterController {
                     || StringUtils.isBlank(customerRegister.getDescriptionShort())
                     || StringUtils.isBlank(customerRegister.getEducation())
                     || StringUtils.isBlank(customerRegister.getPan())
-                    || customerRegister.getPriceHour() > 0
+                    || customerRegister.getPriceHour() < 0
                     || StringUtils.isBlank(customerRegister.getCurrency())
                     || StringUtils.isBlank(customerRegister.getSocialProfile())
                     || StringUtils.isBlank(customerRegister.getFirstName())

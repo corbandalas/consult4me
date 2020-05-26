@@ -2,9 +2,11 @@ package studio.secretingredients.consult4me.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import studio.secretingredients.consult4me.domain.Specialisation;
 import studio.secretingredients.consult4me.domain.Specialist;
 import studio.secretingredients.consult4me.repository.SpecialistRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -21,6 +23,10 @@ public class SpecialistService {
 
     public Optional<Specialist> findSpecialistByEmail(String email) {
         return specialistRepository.findById(email);
+    }
+
+    public List<Specialist> findAll() {
+        return (List<Specialist>) specialistRepository.findAll();
     }
 
     public Specialist save(Specialist specialist) {

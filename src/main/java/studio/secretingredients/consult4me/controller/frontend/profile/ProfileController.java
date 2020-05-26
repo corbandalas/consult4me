@@ -7,25 +7,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import studio.secretingredients.consult4me.CacheProvider;
-import studio.secretingredients.consult4me.authorization.admin.AdminUserAuthorized;
 import studio.secretingredients.consult4me.authorization.customer.CustomerAuthorized;
 import studio.secretingredients.consult4me.authorization.customer.CustomerToken;
 import studio.secretingredients.consult4me.authorization.specialist.SpecialistAuthorized;
 import studio.secretingredients.consult4me.authorization.specialist.SpecialistToken;
 import studio.secretingredients.consult4me.controller.ResultCodes;
-import studio.secretingredients.consult4me.controller.admin.account.dto.*;
 import studio.secretingredients.consult4me.controller.frontend.profile.dto.*;
-import studio.secretingredients.consult4me.controller.frontend.register.dto.SpecialistRegisterResponse;
-import studio.secretingredients.consult4me.domain.Account;
-import studio.secretingredients.consult4me.domain.AdminRole;
+import studio.secretingredients.consult4me.controller.frontend.register.dto.SpecialistSpecialisation;
 import studio.secretingredients.consult4me.domain.Customer;
+import studio.secretingredients.consult4me.domain.Specialisation;
 import studio.secretingredients.consult4me.domain.Specialist;
 import studio.secretingredients.consult4me.service.AccountService;
 import studio.secretingredients.consult4me.service.CustomerService;
+import studio.secretingredients.consult4me.service.SpecialisationService;
 import studio.secretingredients.consult4me.service.SpecialistService;
-import studio.secretingredients.consult4me.util.SecurityUtil;
-
-import java.util.Date;
 
 @RestController
 @Slf4j
@@ -42,6 +37,9 @@ public class ProfileController {
 
     @Autowired
     CacheProvider cacheProvider;
+
+    @Autowired
+    SpecialisationService specialisationService;
 
 
     @PostMapping(
@@ -109,11 +107,19 @@ public class ProfileController {
                 specialist.setHashedPassword(request.getHashedPassword());
             }
 
+//            if (request.getSpecialisations() != null && request.getSpecialisations().size() > 0) {
+//                specialist.setSpecialisations(request.getSpecialisations());
+//            }
+
             if (request.getSpecialisations() != null && request.getSpecialisations().size() > 0) {
-                specialist.setSpecialisations(request.getSpecialisations());
+                for (SpecialistSpecialisation specialistSpecialisation: request.getSpecialisations()) {
+                    Specialisation specialisation = specialisationService.findById(specialistSpecialisation.getId());
+
+                    specialisation.getSpecialists().add(specialist);
+                }
             }
 
-            Specialist save = specialistService.save(specialist);
+            specialist = specialistService.save(specialist);
 
 
             return new SpecialistGetResponse(ResultCodes.OK_RESPONSE, specialist);

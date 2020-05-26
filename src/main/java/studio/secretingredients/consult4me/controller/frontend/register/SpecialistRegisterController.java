@@ -13,14 +13,15 @@ import studio.secretingredients.consult4me.controller.ResultCodes;
 import studio.secretingredients.consult4me.controller.frontend.register.dto.SpecialistRegister;
 import studio.secretingredients.consult4me.controller.frontend.register.dto.SpecialistRegisterResponse;
 import studio.secretingredients.consult4me.controller.frontend.register.dto.SpecialistSpecialisation;
-import studio.secretingredients.consult4me.domain.*;
+import studio.secretingredients.consult4me.domain.Account;
+import studio.secretingredients.consult4me.domain.Specialisation;
+import studio.secretingredients.consult4me.domain.Specialist;
 import studio.secretingredients.consult4me.service.AccountService;
+import studio.secretingredients.consult4me.service.SpecialisationService;
 import studio.secretingredients.consult4me.service.SpecialistService;
 import studio.secretingredients.consult4me.util.SecurityUtil;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -33,8 +34,9 @@ public class SpecialistRegisterController {
     @Autowired
     SpecialistService specialistService;
 
-//    @Autowired
-//    CacheProvider cacheProvider;
+    @Autowired
+    SpecialisationService specialisationService;
+
 
     @PostMapping(
             value = "/frontend/specialist/register", consumes = "application/json", produces = "application/json")
@@ -110,11 +112,17 @@ public class SpecialistRegisterController {
             specialist.setPhone(customerRegister.getPhone());
             specialist.setRegistrationDate(new Date());
 
+
+            Specialist save = specialistService.save(specialist);
+
             if (customerRegister.getSpecialisations() != null && customerRegister.getSpecialisations().size() > 0) {
-                specialist.setSpecialisations(customerRegister.getSpecialisations());
+                for (SpecialistSpecialisation specialistSpecialisation: customerRegister.getSpecialisations()) {
+                    Specialisation specialisation = specialisationService.findById(specialistSpecialisation.getId());
+
+                    specialisation.getSpecialists().add(save);
+                }
             }
 
-            specialistService.save(specialist);
 
 //            CustomerToken customerToken = new CustomerToken(token, customer, new Date());
 

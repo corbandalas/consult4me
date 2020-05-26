@@ -2,6 +2,7 @@ package studio.secretingredients.consult4me.controller.frontend.profile.dto;
 
 import lombok.Data;
 import studio.secretingredients.consult4me.controller.BaseTokenRequest;
+import studio.secretingredients.consult4me.controller.frontend.register.dto.SpecialistSpecialisation;
 import studio.secretingredients.consult4me.domain.Specialisation;
 
 import javax.persistence.CascadeType;
@@ -40,7 +41,7 @@ public class SpecialistUpdate extends BaseTokenRequest {
 
     private String lastName;
 
-    private List<Specialisation> specialisations;
+    private List<SpecialistSpecialisation> specialisations;
 
     private String hashedPassword;
 

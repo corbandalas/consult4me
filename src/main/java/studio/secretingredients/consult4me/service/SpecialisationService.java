@@ -25,6 +25,10 @@ public class SpecialisationService {
         return (List<Specialisation>) specialisationRepository.findAll();
     }
 
+    public Specialisation findById(long id) {
+        return specialisationRepository.findById(id).get();
+    }
+
     public Specialisation save(Specialisation session) {
         return specialisationRepository.save(session);
     }

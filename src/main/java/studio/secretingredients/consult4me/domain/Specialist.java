@@ -46,8 +46,5 @@ public class Specialist extends Customer {
     @Column
     private String pan;
 
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
-    private List<Specialisation> specialisations;
-
 }
 

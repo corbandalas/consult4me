@@ -3,6 +3,7 @@ package studio.secretingredients.consult4me.domain;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Specialisation entity
@@ -22,6 +23,9 @@ public class Specialisation {
 
     @Enumerated(EnumType.STRING)
     private SpecialisationType specialisationType;
+
+    @OneToMany
+    private List<Specialist> specialists;
 
 }
 

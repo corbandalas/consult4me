@@ -75,6 +75,9 @@ public class CustomerLoginController {
                 return new CustomerLoginResponse(ResultCodes.WRONG_USER_PASSWORD, null);
             }
 
+            log.info("Calculated checksum: " + SecurityUtil.generateKeyFromArray(userLogin.getAccountID(), userLogin.getLogin(), userLogin.getHashedPassword(),
+                    account.getPrivateKey()));
+
             if (!SecurityUtil.generateKeyFromArray(userLogin.getAccountID(), userLogin.getLogin(), userLogin.getHashedPassword(),
                     account.getPrivateKey()).equalsIgnoreCase(userLogin.getCheckSum())) {
                 return new CustomerLoginResponse(ResultCodes.WRONG_CHECKSUM, null);

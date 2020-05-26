@@ -1,5 +1,6 @@
 package studio.secretingredients.consult4me.authorization.specialist;
 
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -17,6 +18,7 @@ import java.util.Optional;
 
 @Aspect
 @Configuration
+@Slf4j
 public class SpecialistAuthAspect {
 
     @Autowired
@@ -30,6 +32,8 @@ public class SpecialistAuthAspect {
 
     @Before("@annotation(studio.secretingredients.consult4me.authorization.specialist.SpecialistAuthorized) && args(request,..)")
     public void before(JoinPoint joinPoint, BaseTokenRequest request) {
+
+        log.info("SpecialistAuthAspect is working");
 
         if (!(request instanceof BaseTokenRequest)) {
             throw

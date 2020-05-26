@@ -38,14 +38,14 @@ public class SpecialistRegisterController {
     @PostMapping(
             value = "/frontend/specialist/register", consumes = "application/json", produces = "application/json")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(value = "SHA256(accountID+email+phone+hashedPassword+phone+privateKey)"
+            @ApiImplicitParam(value = "SHA256(accountID+email+phone++phone+privateKey)"
                     , name = "checksum")})
     public SpecialistRegisterResponse login(@RequestBody SpecialistRegister customerRegister) {
 
         try {
 
             if (customerRegister == null || StringUtils.isBlank(customerRegister.getAccountID())
-                    || StringUtils.isBlank(customerRegister.getHashedPassword())
+//                    || StringUtils.isBlank(customerRegister.getHashedPassword())
                     || StringUtils.isBlank(customerRegister.getCheckSum())
                     || StringUtils.isBlank(customerRegister.getEmail())
                     || StringUtils.isBlank(customerRegister.getDescriptionDetailed())
@@ -75,7 +75,7 @@ public class SpecialistRegisterController {
                 return new SpecialistRegisterResponse(ResultCodes.ALREADY_REGISTERED);
             }
 
-            if (!SecurityUtil.generateKeyFromArray(customerRegister.getAccountID(), customerRegister.getEmail(), customerRegister.getHashedPassword(), customerRegister.getPhone(),
+            if (!SecurityUtil.generateKeyFromArray(customerRegister.getAccountID(), customerRegister.getEmail(), customerRegister.getPhone(),
                     account.getPrivateKey()).equalsIgnoreCase(customerRegister.getCheckSum())) {
                 return new SpecialistRegisterResponse(ResultCodes.WRONG_CHECKSUM);
             }

@@ -40,14 +40,14 @@ public class CustomerRegisterController {
     @PostMapping(
             value = "/frontend/customer/register", consumes = "application/json", produces = "application/json")
     @ApiImplicitParams(value = {
-            @ApiImplicitParam(value = "SHA256(accountID+email+hashedPassword+phone+privateKey)"
+            @ApiImplicitParam(value = "SHA256(accountID+email++phone+privateKey)"
                     , name = "checksum")})
     public CustomerRegisterResponse login(@RequestBody CustomerRegister customerRegister) {
 
         try {
 
             if (customerRegister == null || StringUtils.isBlank(customerRegister.getAccountID())
-                    || StringUtils.isBlank(customerRegister.getHashedPassword())
+//                    || StringUtils.isBlank(customerRegister.getHashedPassword())
                     || StringUtils.isBlank(customerRegister.getCheckSum())
                     || StringUtils.isBlank(customerRegister.getEmail())
                     || StringUtils.isBlank(customerRegister.getFirstName())
@@ -70,7 +70,7 @@ public class CustomerRegisterController {
                 return new CustomerRegisterResponse(ResultCodes.ALREADY_REGISTERED);
             }
 
-            if (!SecurityUtil.generateKeyFromArray(customerRegister.getAccountID(), customerRegister.getEmail(), customerRegister.getHashedPassword(), customerRegister.getPhone(),
+            if (!SecurityUtil.generateKeyFromArray(customerRegister.getAccountID(), customerRegister.getEmail(), /*customerRegister.getHashedPassword(),*/ customerRegister.getPhone(),
                     account.getPrivateKey()).equalsIgnoreCase(customerRegister.getCheckSum())) {
                 return new CustomerRegisterResponse(ResultCodes.WRONG_CHECKSUM);
             }
@@ -107,6 +107,8 @@ public class CustomerRegisterController {
                     return channel;
                 });
             }
+
+            log.info("List of channels size " + list.size());
 
             customer.setChannels(list);
 

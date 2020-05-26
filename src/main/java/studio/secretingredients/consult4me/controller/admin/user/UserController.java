@@ -177,6 +177,41 @@ public class UserController {
         return new AccountGetResponse(ResultCodes.GENERAL_ERROR, null);
     }
 
+
+    @PostMapping(
+            value = "/admin/removeUserToAccount", consumes = "application/json", produces = "application/json")
+    @AdminUserAuthorized(requiredRoles = {
+            AdminRole.ROLE_ADMIN_USER_ADD_TO_ACCOUNT
+    })
+    public AccountGetResponse removeUser(@RequestBody UserAddToAccount request) {
+
+        try {
+
+            User userByID = userService.findUserByID(request.getEmail());
+
+            Account accountByID = accountService.findAccountByID(request.getId());
+
+            if (userByID == null) {
+                return new AccountGetResponse(ResultCodes.WRONG_USER, null);
+            }
+
+            if (accountByID == null) {
+                return new AccountGetResponse(ResultCodes.WRONG_ACCOUNT, null);
+            }
+
+            if (!accountByID.getUsers().contains(userByID)) {
+                accountByID.getUsers().remove(userByID);
+                Account save = accountService.save(accountByID);
+
+                return new AccountGetResponse(ResultCodes.OK_RESPONSE, save);
+            }
+
+        } catch (Exception e) {
+            log.error("UserController", e);
+        }
+        return new AccountGetResponse(ResultCodes.GENERAL_ERROR, null);
+    }
+
 }
 
 

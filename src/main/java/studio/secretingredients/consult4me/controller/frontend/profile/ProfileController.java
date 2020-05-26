@@ -116,6 +116,8 @@ public class ProfileController {
                     Specialisation specialisation = specialisationService.findById(specialistSpecialisation.getId());
 
                     specialisation.getSpecialists().add(specialist);
+
+                    specialisationService.save(specialisation);
                 }
             }
 

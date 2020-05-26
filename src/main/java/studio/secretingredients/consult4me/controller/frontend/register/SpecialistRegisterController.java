@@ -120,6 +120,8 @@ public class SpecialistRegisterController {
                     Specialisation specialisation = specialisationService.findById(specialistSpecialisation.getId());
 
                     specialisation.getSpecialists().add(save);
+
+                    specialisationService.save(specialisation);
                 }
             }
 

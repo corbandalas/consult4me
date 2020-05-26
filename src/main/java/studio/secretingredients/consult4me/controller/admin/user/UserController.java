@@ -179,7 +179,7 @@ public class UserController {
 
 
     @PostMapping(
-            value = "/admin/removeUserToAccount", consumes = "application/json", produces = "application/json")
+            value = "/admin/removeUserFromAccount", consumes = "application/json", produces = "application/json")
     @AdminUserAuthorized(requiredRoles = {
             AdminRole.ROLE_ADMIN_USER_ADD_TO_ACCOUNT
     })

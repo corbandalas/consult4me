@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import studio.secretingredients.consult4me.CacheProvider;
 import studio.secretingredients.consult4me.authorization.customer.CustomerToken;
+import studio.secretingredients.consult4me.authorization.specialist.SpecialistToken;
 import studio.secretingredients.consult4me.controller.ResultCodes;
 import studio.secretingredients.consult4me.controller.frontend.login.dto.SpecialistLogin;
 import studio.secretingredients.consult4me.controller.frontend.login.dto.SpecialistLoginResponse;
@@ -82,9 +83,9 @@ public class SpecialistLoginController {
 
             String token = RandomStringUtils.randomAlphanumeric(20);
 
-            CustomerToken customerToken = new CustomerToken(token, customer, new Date(), account);
+            SpecialistToken customerToken = new SpecialistToken(token, customer, new Date(), account);
 
-            cacheProvider.putCustomerToken(token, customerToken);
+            cacheProvider.putSpecialistToken(token, customerToken);
 
             return new SpecialistLoginResponse(ResultCodes.OK_RESPONSE, token);
 

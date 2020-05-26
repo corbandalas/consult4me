@@ -14,7 +14,34 @@ import java.util.List;
  */
 @Data
 @Entity(name = "specialist")
-public class Specialist extends Customer {
+public class Specialist {
+
+    @Id
+    private String email;
+
+    @Column
+    private String hashedPassword;
+
+    @Column
+    private String phone;
+
+    @Column
+    private String firstName;
+
+    @Column
+    private String lastName;
+
+    @Column
+    private boolean active;
+
+    @Column
+    private boolean agree;
+
+    @Column
+    private Date registrationDate;
+
+    @OneToMany(cascade = {CascadeType.ALL }, fetch = FetchType.LAZY)
+    private List<Channel> channels;
 
     @Column
     private Date birthDate;

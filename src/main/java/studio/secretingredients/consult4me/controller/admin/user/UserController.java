@@ -199,7 +199,7 @@ public class UserController {
                 return new AccountGetResponse(ResultCodes.WRONG_ACCOUNT, null);
             }
 
-            if (!accountByID.getUsers().contains(userByID)) {
+            if (accountByID.getUsers().contains(userByID)) {
                 accountByID.getUsers().remove(userByID);
                 Account save = accountService.save(accountByID);
 

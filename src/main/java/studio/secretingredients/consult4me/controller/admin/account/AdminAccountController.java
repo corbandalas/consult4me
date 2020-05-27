@@ -21,7 +21,7 @@ import java.util.Date;
 
 @RestController
 @Slf4j
-public class AccountController {
+public class AdminAccountController {
 
     @Autowired
     AccountService accountService;

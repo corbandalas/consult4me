@@ -33,7 +33,7 @@ import java.util.Optional;
 
 @RestController
 @Slf4j
-public class CustomerSpecialistController {
+public class AdminCustomerSpecialistController {
 
     @Autowired
     AccountService accountService;

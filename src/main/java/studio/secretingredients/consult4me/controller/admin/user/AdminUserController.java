@@ -20,7 +20,7 @@ import java.util.Date;
 
 @RestController
 @Slf4j
-public class UserController {
+public class AdminUserController {
 
     @Autowired
     AccountService accountService;

@@ -12,7 +12,7 @@ import studio.secretingredients.consult4me.domain.AdminRole;
 import studio.secretingredients.consult4me.service.PropertyService;
 
 @RestController
-public class PropertyController {
+public class AdminPropertyController {
 
     @Autowired
     PropertyService propertyService;

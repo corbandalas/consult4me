@@ -24,7 +24,7 @@ import studio.secretingredients.consult4me.service.SpecialistService;
 
 @RestController
 @Slf4j
-public class ProfileController {
+public class FrontendProfileController {
 
     @Autowired
     AccountService accountService;

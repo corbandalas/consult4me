@@ -18,7 +18,7 @@ import studio.secretingredients.consult4me.util.SecurityUtil;
 
 @Slf4j
 @RestController
-public class CategoriesListController {
+public class FrontendCategoriesListController {
 
     @Autowired
     AccountService accountService;

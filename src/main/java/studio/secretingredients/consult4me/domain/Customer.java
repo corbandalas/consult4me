@@ -14,7 +14,7 @@ import java.util.List;
  */
 @Data
 @Entity(name = "customer")
-@Inheritance(strategy = InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Customer {
 
 	@Id

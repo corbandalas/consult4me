@@ -1,6 +1,8 @@
 package studio.secretingredients.consult4me.domain;
 
 import lombok.Data;
+import org.hibernate.annotations.Polymorphism;
+import org.hibernate.annotations.PolymorphismType;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -14,6 +16,7 @@ import java.util.List;
  */
 @Data
 @Entity(name = "specialist")
+@Polymorphism(type = PolymorphismType.EXPLICIT)
 public class Specialist extends Customer {
 
     @Column

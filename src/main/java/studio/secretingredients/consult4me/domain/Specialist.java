@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Data
 @Entity(name = "specialist")
-public class Specialist extends Customer {
+public class Specialist {
 
     @Id
     private String email;

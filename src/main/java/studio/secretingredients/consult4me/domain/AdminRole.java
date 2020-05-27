@@ -18,9 +18,11 @@ public enum AdminRole {
     ROLE_ADMIN_USER_UPDATE("Allows to update user"),
     ROLE_ADMIN_USER_GET("Allows to get user data"),
     ROLE_ADMIN_USER_GET_ALL_ROLES("Allows to get all roles data"),
-    ROLE_ADMIN_USER_ADD_TO_ACCOUNT("Allows to all user to account"),
+    ROLE_ADMIN_USER_ADD_TO_ACCOUNT("Allows to get all user to account"),
     ROLE_ADMIN_SPECIALIST_LIST("Allows to view specialist list"),
     ROLE_ADMIN_CUSTOMER_LIST("Allows to view customer list"),
+    ROLE_ADMIN_ADD_SPECIALIST("Allows to add specialist"),
+    ROLE_ADMIN_EDIT_SPECIALIST("Allows to edit specialist"),
 
     ;
 

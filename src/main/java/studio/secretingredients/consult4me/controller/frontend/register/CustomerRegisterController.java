@@ -43,7 +43,7 @@ public class CustomerRegisterController {
     @ApiImplicitParams(value = {
             @ApiImplicitParam(value = "SHA256(accountID+email+phone+privateKey)"
                     , name = "checksum")})
-    public CustomerRegisterResponse login(@RequestBody CustomerRegister customerRegister) {
+    public CustomerRegisterResponse customerRegister(@RequestBody CustomerRegister customerRegister) {
 
         try {
 

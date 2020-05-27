@@ -42,8 +42,8 @@ public class Specialist {
     @Column
     private Date registrationDate;
 
-    @OneToMany(cascade = {CascadeType.ALL }, fetch = FetchType.LAZY)
-    private List<Channel> channels;
+//    @OneToMany(cascade = {CascadeType.ALL }, fetch = FetchType.LAZY)
+//    private List<Channel> channels;
 
     @Column
     private Date birthDate;

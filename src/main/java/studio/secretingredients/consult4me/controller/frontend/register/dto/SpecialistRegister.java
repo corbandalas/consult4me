@@ -19,8 +19,8 @@ public class SpecialistRegister {
 
     @NotNull
     private String email;
-//    @NotNull
-//    private String hashedPassword;
+    @NotNull
+    private String hashedPassword;
     @NotNull
     private String phone;
     @NotNull

@@ -142,7 +142,7 @@ public class FrontendCustomerRegisterController {
         try {
 
             if (customerRegister == null || StringUtils.isBlank(customerRegister.getAccountID())
-//                    || StringUtils.isBlank(customerRegister.getHashedPassword())
+                    || StringUtils.isBlank(customerRegister.getHashedPassword())
                     || StringUtils.isBlank(customerRegister.getCheckSum())
                     || StringUtils.isBlank(customerRegister.getEmail())
                     || StringUtils.isBlank(customerRegister.getDescriptionDetailed())
@@ -196,10 +196,10 @@ public class FrontendCustomerRegisterController {
             specialist.setPriceHour(customerRegister.getPriceHour());
             specialist.setPan(customerRegister.getPan());
 
-            String generatedPassword = RandomStringUtils.randomNumeric(6);
-            specialist.setHashedPassword(SecurityUtil.generateKeyFromArray(generatedPassword));
+//            String generatedPassword = RandomStringUtils.randomNumeric(6);
+            specialist.setHashedPassword(customerRegister.getHashedPassword());
 
-            log.info("Generated password for specialist [" + customerRegister.getEmail() + "] = " + generatedPassword);
+//            log.info("Generated password for specialist [" + customerRegister.getEmail() + "] = " + generatedPassword);
 
             //TODO: Sending SMS/email with generated password
 

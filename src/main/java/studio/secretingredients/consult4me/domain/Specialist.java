@@ -1,5 +1,6 @@
 package studio.secretingredients.consult4me.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.Polymorphism;
 import org.hibernate.annotations.PolymorphismType;
@@ -73,6 +74,7 @@ public class Specialist {
     @Column
     private String pan;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "specialist_specialisation",

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import studio.secretingredients.consult4me.domain.Session;
 import studio.secretingredients.consult4me.domain.Specialisation;
+import studio.secretingredients.consult4me.domain.Specialist;
 import studio.secretingredients.consult4me.repository.SessionRepository;
 import studio.secretingredients.consult4me.repository.SpecialisationRepository;
 
@@ -27,6 +28,10 @@ public class SpecialisationService {
 
     public Specialisation findById(long id) {
         return specialisationRepository.findById(id).get();
+    }
+
+    public List<Specialisation> findBySpecialist(Specialist specialist) {
+        return specialisationRepository.findBySpecialist(specialist);
     }
 
     public Specialisation save(Specialisation session) {

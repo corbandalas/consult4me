@@ -29,6 +29,7 @@ import studio.secretingredients.consult4me.service.SpecialistService;
 import studio.secretingredients.consult4me.util.SecurityUtil;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -220,6 +221,22 @@ public class AdminCustomerSpecialistController {
     public CustomerListResponse customerList(@RequestBody CustomerSpecialistList request) {
 
         return new CustomerListResponse(ResultCodes.OK_RESPONSE, customerService.findAll());
+    }
+
+    @PostMapping(
+            value = "/admin/specialist/categories", consumes = "application/json", produces = "application/json")
+    @AdminUserAuthorized(requiredRoles = {
+            AdminRole.ROLE_ADMIN_CUSTOMER_LIST
+    })
+    public AdminSpecialistCategoriesResponse specialistCategories(@RequestBody AdminSpecialistCategories request) {
+
+        Optional<Specialist> specialistByEmail = specialistService.findSpecialistByEmail(request.getSpecialistEmail());
+
+        Specialist specialist = specialistByEmail.get();
+
+        List<Specialisation> bySpecialist = specialisationService.findBySpecialist(specialist);
+
+        return new AdminSpecialistCategoriesResponse(ResultCodes.OK_RESPONSE, bySpecialist);
     }
 
 

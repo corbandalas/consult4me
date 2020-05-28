@@ -4,6 +4,9 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import studio.secretingredients.consult4me.domain.Session;
 import studio.secretingredients.consult4me.domain.Specialisation;
+import studio.secretingredients.consult4me.domain.Specialist;
+
+import java.util.List;
 
 
 /**
@@ -15,4 +18,6 @@ import studio.secretingredients.consult4me.domain.Specialisation;
 
 @Repository
 public interface SpecialisationRepository extends CrudRepository<Specialisation, Long> {
+
+    List<Specialisation> findBySpecialist(Specialist specialist);
 }

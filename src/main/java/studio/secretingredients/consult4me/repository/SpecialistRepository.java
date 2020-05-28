@@ -15,4 +15,5 @@ import studio.secretingredients.consult4me.domain.Specialist;
 
 @Repository
 public interface SpecialistRepository extends CrudRepository<Specialist, String> {
+
 }

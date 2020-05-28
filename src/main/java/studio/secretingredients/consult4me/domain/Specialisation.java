@@ -1,5 +1,6 @@
 package studio.secretingredients.consult4me.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -24,6 +25,7 @@ public class Specialisation {
     @Enumerated(EnumType.STRING)
     private SpecialisationType specialisationType;
 
+    @JsonIgnore
     @ManyToMany(
             mappedBy = "specialisations")
     private List<Specialist> specialists;

@@ -1,6 +1,8 @@
 package studio.secretingredients.consult4me.repository;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import studio.secretingredients.consult4me.domain.Session;
 import studio.secretingredients.consult4me.domain.Specialisation;
@@ -19,5 +21,6 @@ import java.util.List;
 @Repository
 public interface SpecialisationRepository extends CrudRepository<Specialisation, Long> {
 
-    List<Specialisation> findBySpecialist(Specialist specialist);
+//    @Query("SELECT a FROM Specialisation a WHERE a.title=:title and a.category=:category")
+//    List<Specialisation> fetchSpecialisaction(@Param("specialist") String specialist);
 }

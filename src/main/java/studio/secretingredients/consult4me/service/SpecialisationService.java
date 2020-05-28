@@ -30,9 +30,9 @@ public class SpecialisationService {
         return specialisationRepository.findById(id).get();
     }
 
-    public List<Specialisation> findBySpecialist(Specialist specialist) {
-        return specialisationRepository.findBySpecialist(specialist);
-    }
+//    public List<Specialisation> findBySpecialist(Specialist specialist) {
+//        return specialisationRepository.findBySpecialist(specialist);
+//    }
 
     public Specialisation save(Specialisation session) {
         return specialisationRepository.save(session);

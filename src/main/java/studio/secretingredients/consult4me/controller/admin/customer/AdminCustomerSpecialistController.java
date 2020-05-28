@@ -234,9 +234,9 @@ public class AdminCustomerSpecialistController {
 
         Specialist specialist = specialistByEmail.get();
 
-        List<Specialisation> bySpecialist = specialisationService.findBySpecialist(specialist);
+//        List<Specialisation> bySpecialist = specialisationService.findBySpecialist(specialist);
 
-        return new AdminSpecialistCategoriesResponse(ResultCodes.OK_RESPONSE, bySpecialist);
+        return new AdminSpecialistCategoriesResponse(ResultCodes.OK_RESPONSE, null);
     }
 
 

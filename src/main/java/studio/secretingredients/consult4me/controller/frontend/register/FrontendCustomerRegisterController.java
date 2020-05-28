@@ -18,10 +18,7 @@ import studio.secretingredients.consult4me.service.SpecialisationService;
 import studio.secretingredients.consult4me.service.SpecialistService;
 import studio.secretingredients.consult4me.util.SecurityUtil;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @RestController
@@ -206,18 +203,33 @@ public class FrontendCustomerRegisterController {
             specialist.setPhone(customerRegister.getPhone());
             specialist.setRegistrationDate(new Date());
 
-
-            Specialist save = specialistService.save(specialist);
+            Set<Specialisation> specialisations = new HashSet<>();
 
             if (customerRegister.getSpecialisations() != null && customerRegister.getSpecialisations().size() > 0) {
                 for (SpecialistSpecialisation specialistSpecialisation: customerRegister.getSpecialisations()) {
+
                     Specialisation specialisation = specialisationService.findById(specialistSpecialisation.getId());
 
-                    specialisation.getSpecialists().add(save);
+                    specialisations.add(specialisation);
 
-                    specialisationService.save(specialisation);
                 }
+
+                specialist.setSpecialisations(specialisations);
+//
+//
+//                    specialisation.getSpecialists().add(save);
+//
+//                    specialisationService.save(specialisation);
+//                }
+
+//                specialist.setSpecialisations(customerRegister.getSpecialisations());
             }
+
+
+
+            Specialist save = specialistService.save(specialist);
+
+
 
 
 //            CustomerToken customerToken = new CustomerToken(token, customer, new Date());

@@ -7,6 +7,7 @@ import org.hibernate.annotations.PolymorphismType;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Specialist entity
@@ -42,9 +43,6 @@ public class Specialist {
     @Column
     private Date registrationDate;
 
-//    @OneToMany(cascade = {CascadeType.ALL }, fetch = FetchType.LAZY)
-//    private List<Channel> channels;
-
     @Column
     private Date birthDate;
 
@@ -74,6 +72,13 @@ public class Specialist {
 
     @Column
     private String pan;
+
+    @ManyToMany
+    @JoinTable(
+            name = "specialist_specialisation",
+            joinColumns = @JoinColumn(name = "email"),
+            inverseJoinColumns = @JoinColumn(name = "specialisation_id"))
+    private Set<Specialisation> specialisations;
 
 }
 

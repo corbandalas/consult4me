@@ -24,7 +24,8 @@ public class Specialisation {
     @Enumerated(EnumType.STRING)
     private SpecialisationType specialisationType;
 
-    @OneToMany
+    @ManyToMany(
+            mappedBy = "specialisations")
     private List<Specialist> specialists;
 
 }

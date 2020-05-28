@@ -28,9 +28,7 @@ import studio.secretingredients.consult4me.service.SpecialisationService;
 import studio.secretingredients.consult4me.service.SpecialistService;
 import studio.secretingredients.consult4me.util.SecurityUtil;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @Slf4j
@@ -122,18 +120,23 @@ public class AdminCustomerSpecialistController {
             specialist.setPhone(request.getPhone());
             specialist.setRegistrationDate(new Date());
 
+            Set<Specialisation> specialisations = new HashSet<>();
 
-            Specialist save = specialistService.save(specialist);
 
             if (request.getSpecialisations() != null && request.getSpecialisations().size() > 0) {
                 for (SpecialistSpecialisation specialistSpecialisation: request.getSpecialisations()) {
+
                     Specialisation specialisation = specialisationService.findById(specialistSpecialisation.getId());
 
-                    specialisation.getSpecialists().add(save);
+                    specialisations.add(specialisation);
 
-                    specialisationService.save(specialisation);
                 }
+
+                specialist.setSpecialisations(specialisations);
             }
+
+            Specialist save = specialistService.save(specialist);
+
 
             return new SpecialistRegisterResponse(ResultCodes.OK_RESPONSE);
 
@@ -190,14 +193,18 @@ public class AdminCustomerSpecialistController {
 //                specialist.setSpecialisations(request.getSpecialisations());
 //            }
 
+            Set<Specialisation> specialisations = new HashSet<>();
+
             if (request.getSpecialisations() != null && request.getSpecialisations().size() > 0) {
                 for (SpecialistSpecialisation specialistSpecialisation: request.getSpecialisations()) {
+
                     Specialisation specialisation = specialisationService.findById(specialistSpecialisation.getId());
 
-                    specialisation.getSpecialists().add(specialist);
+                    specialisations.add(specialisation);
 
-                    specialisationService.save(specialisation);
                 }
+
+                specialist.setSpecialisations(specialisations);
             }
 
             specialist = specialistService.save(specialist);
@@ -234,9 +241,7 @@ public class AdminCustomerSpecialistController {
 
         Specialist specialist = specialistByEmail.get();
 
-//        List<Specialisation> bySpecialist = specialisationService.findBySpecialist(specialist);
-
-        return new AdminSpecialistCategoriesResponse(ResultCodes.OK_RESPONSE, null);
+        return new AdminSpecialistCategoriesResponse(ResultCodes.OK_RESPONSE, specialist.getSpecialisations());
     }
 
 

@@ -6,6 +6,7 @@ import studio.secretingredients.consult4me.controller.BaseTokenRequest;
 import studio.secretingredients.consult4me.domain.Specialisation;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -13,7 +14,7 @@ public class AdminSpecialistCategoriesResponse {
 
     private String result;
 
-    private List<Specialisation> specialisationList;
+    private Set<Specialisation> specialisationList;
 
 
 }

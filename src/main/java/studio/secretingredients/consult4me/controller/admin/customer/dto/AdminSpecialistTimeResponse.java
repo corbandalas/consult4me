@@ -7,7 +7,7 @@ import studio.secretingredients.consult4me.domain.SpecialistTime;
 
 @Data
 @AllArgsConstructor
-public class AdminSpecialistTimeResponse extends BaseTokenRequest {
+public class AdminSpecialistTimeResponse {
 
     private String result;
 

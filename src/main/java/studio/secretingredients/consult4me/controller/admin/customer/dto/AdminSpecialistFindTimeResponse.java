@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class AdminSpecialistFindTimeResponse extends BaseTokenRequest {
+public class AdminSpecialistFindTimeResponse {
 
     private String result;
 

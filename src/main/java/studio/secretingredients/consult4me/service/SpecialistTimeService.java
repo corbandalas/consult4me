@@ -29,4 +29,8 @@ public class SpecialistTimeService {
     public List<SpecialistTime> findSpecialistTime(Specialist specialist) {
         return specialistTimeRepository.findBySpecialist(specialist);
     }
+
+    public SpecialistTime findById(long id) {
+        return specialistTimeRepository.findById(id).get();
+    }
 }

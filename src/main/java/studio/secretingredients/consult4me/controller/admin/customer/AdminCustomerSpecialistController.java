@@ -278,6 +278,26 @@ public class AdminCustomerSpecialistController {
     }
 
 
+    @PostMapping(
+            value = "/admin/specialist/updateTime", consumes = "application/json", produces = "application/json")
+    @AdminUserAuthorized(requiredRoles = {
+            AdminRole.ROLE_ADMIN_EDIT_SPECIALIST
+    })
+    public AdminSpecialistTimeResponse updateSpecialistTime(@RequestBody AdminSpecialistUpdateTime request) {
+
+        Optional<Specialist> specialistByEmail = specialistService.findSpecialistByEmail(request.getSpecialistEmail());
+
+        SpecialistTime specialistTime = specialistTimeService.findById(request.getId());
+
+        specialistTime.setStartDate(request.getStartDate());
+        specialistTime.setEndDate(request.getEndDate());
+        specialistTime.setFree(request.isFree());
+
+        SpecialistTime save = specialistTimeService.save(specialistTime);
+
+        return new AdminSpecialistTimeResponse(ResultCodes.OK_RESPONSE, save);
+    }
+
 
 }
 

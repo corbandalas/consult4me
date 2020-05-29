@@ -1,5 +1,7 @@
 package studio.secretingredients.consult4me.controller.frontend.profile;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,27 +9,26 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import studio.secretingredients.consult4me.CacheProvider;
+import studio.secretingredients.consult4me.authorization.admin.AdminUserAuthorized;
 import studio.secretingredients.consult4me.authorization.customer.CustomerAuthorized;
 import studio.secretingredients.consult4me.authorization.customer.CustomerToken;
 import studio.secretingredients.consult4me.authorization.specialist.SpecialistAuthorized;
 import studio.secretingredients.consult4me.authorization.specialist.SpecialistToken;
+import studio.secretingredients.consult4me.controller.BaseTokenRequest;
 import studio.secretingredients.consult4me.controller.ResultCodes;
+import studio.secretingredients.consult4me.controller.admin.customer.dto.*;
 import studio.secretingredients.consult4me.controller.frontend.profile.dto.*;
 import studio.secretingredients.consult4me.controller.frontend.register.dto.SpecialistSpecialisation;
-import studio.secretingredients.consult4me.domain.Customer;
-import studio.secretingredients.consult4me.domain.Specialisation;
-import studio.secretingredients.consult4me.domain.Specialist;
-import studio.secretingredients.consult4me.service.AccountService;
-import studio.secretingredients.consult4me.service.CustomerService;
-import studio.secretingredients.consult4me.service.SpecialisationService;
-import studio.secretingredients.consult4me.service.SpecialistService;
+import studio.secretingredients.consult4me.domain.*;
+import studio.secretingredients.consult4me.service.*;
+import studio.secretingredients.consult4me.util.SecurityUtil;
+
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @Slf4j
 public class FrontendProfileController {
-
-    @Autowired
-    AccountService accountService;
 
     @Autowired
     CustomerService customerService;
@@ -39,7 +40,13 @@ public class FrontendProfileController {
     CacheProvider cacheProvider;
 
     @Autowired
+    AccountService accountService;
+
+    @Autowired
     SpecialisationService specialisationService;
+
+    @Autowired
+    SpecialistTimeService specialistTimeService;
 
 
     @PostMapping(
@@ -131,6 +138,99 @@ public class FrontendProfileController {
         }
 
         return new SpecialistGetResponse(ResultCodes.GENERAL_ERROR, null);
+    }
+
+
+
+
+    @PostMapping(
+            value = "/frontend/categories/list", consumes = "application/json", produces = "application/json")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(value = "SHA256(accountID+privateKey)"
+                    , name = "checksum")})
+    public CategoriesListResponse login(@RequestBody CategoriesList categoriesList) {
+
+        try {
+
+            if (categoriesList == null || StringUtils.isBlank(categoriesList.getAccountID())
+                    || StringUtils.isBlank(categoriesList.getCheckSum())
+                    ) {
+                return new CategoriesListResponse(ResultCodes.WRONG_REQUEST, null);
+            }
+
+            Account account = accountService.findAccountByID(Integer.parseInt(categoriesList.getAccountID()));
+
+            if (account == null || !account.isActive()) {
+                return new CategoriesListResponse(ResultCodes.WRONG_ACCOUNT, null);
+            }
+
+
+            if (!SecurityUtil.generateKeyFromArray(categoriesList.getAccountID(),
+                    account.getPrivateKey()).equalsIgnoreCase(categoriesList.getCheckSum())) {
+                return new CategoriesListResponse(ResultCodes.WRONG_CHECKSUM, null);
+            }
+
+
+            return new CategoriesListResponse(ResultCodes.OK_RESPONSE, specialisationService.findAll());
+
+        } catch (Exception e) {
+            log.error("Error", e);
+            return new CategoriesListResponse(ResultCodes.GENERAL_ERROR, null);
+        }
+    }
+
+
+    @PostMapping(
+            value = "/frontend/specialist/addTime", consumes = "application/json", produces = "application/json")
+    @SpecialistAuthorized
+    public FrontendSpecialistTimeResponse addTimeToSpecialist(@RequestBody FrontendSpecialistAddTime request) {
+
+        Specialist specialist = cacheProvider.getSpecialistToken(request.getToken()).getSpecialist();
+
+        SpecialistTime specialistTime = new SpecialistTime();
+
+        specialistTime.setSpecialist(specialist);
+        specialistTime.setStartDate(request.getStartDate());
+        specialistTime.setEndDate(request.getEndDate());
+        specialistTime.setFree(true);
+
+        SpecialistTime save = specialistTimeService.save(specialistTime);
+
+        return new FrontendSpecialistTimeResponse(ResultCodes.OK_RESPONSE, save);
+    }
+
+
+    @PostMapping(
+            value = "/frontend/specialist/getTime", consumes = "application/json", produces = "application/json")
+    @AdminUserAuthorized(requiredRoles = {
+            AdminRole.ROLE_ADMIN_EDIT_SPECIALIST
+    })
+    public AdminSpecialistFindTimeResponse findSpecialistTime(@RequestBody BaseTokenRequest request) {
+
+        Specialist specialist = cacheProvider.getSpecialistToken(request.getToken()).getSpecialist();
+
+        List<SpecialistTime> specialistTime = specialistTimeService.findSpecialistTime(specialist);
+
+        return new AdminSpecialistFindTimeResponse(ResultCodes.OK_RESPONSE, specialistTime);
+    }
+
+
+    @PostMapping(
+            value = "/frontend/specialist/updateTime", consumes = "application/json", produces = "application/json")
+    @AdminUserAuthorized(requiredRoles = {
+            AdminRole.ROLE_ADMIN_EDIT_SPECIALIST
+    })
+    public AdminSpecialistTimeResponse updateSpecialistTime(@RequestBody FrontendSpecialistUpdateTime request) {
+
+        SpecialistTime specialistTime = specialistTimeService.findById(request.getId());
+
+        specialistTime.setStartDate(request.getStartDate());
+        specialistTime.setEndDate(request.getEndDate());
+        specialistTime.setFree(request.isFree());
+
+        SpecialistTime save = specialistTimeService.save(specialistTime);
+
+        return new AdminSpecialistTimeResponse(ResultCodes.OK_RESPONSE, save);
     }
 
 }

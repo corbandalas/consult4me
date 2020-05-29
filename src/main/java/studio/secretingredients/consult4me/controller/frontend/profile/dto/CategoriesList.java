@@ -1,4 +1,4 @@
-package studio.secretingredients.consult4me.controller.frontend.categories.dto;
+package studio.secretingredients.consult4me.controller.frontend.profile.dto;
 
 import lombok.Data;
 

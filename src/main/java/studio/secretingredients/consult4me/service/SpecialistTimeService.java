@@ -7,6 +7,9 @@ import studio.secretingredients.consult4me.domain.SpecialistTime;
 import studio.secretingredients.consult4me.repository.SpecialistRepository;
 import studio.secretingredients.consult4me.repository.SpecialistTimeRepository;
 
+import java.util.Date;
+import java.util.List;
+
 /**
  * SpecialistTime service
  *
@@ -21,5 +24,9 @@ public class SpecialistTimeService {
 
     public SpecialistTime save(SpecialistTime specialistTime) {
         return specialistTimeRepository.save(specialistTime);
+    }
+
+    public List<SpecialistTime> findSpecialistTime(Specialist specialist) {
+        return specialistTimeRepository.findBySpecialist(specialist);
     }
 }

@@ -5,6 +5,9 @@ import org.springframework.stereotype.Repository;
 import studio.secretingredients.consult4me.domain.Specialist;
 import studio.secretingredients.consult4me.domain.SpecialistTime;
 
+import java.util.Date;
+import java.util.List;
+
 
 /**
  * Specialist time repository interface
@@ -15,4 +18,5 @@ import studio.secretingredients.consult4me.domain.SpecialistTime;
 
 @Repository
 public interface SpecialistTimeRepository extends CrudRepository<SpecialistTime, Long> {
+    public List<SpecialistTime> findBySpecialist(Specialist specialist);
 }

@@ -263,6 +263,21 @@ public class AdminCustomerSpecialistController {
     }
 
 
+    @PostMapping(
+            value = "/admin/specialist/addTime", consumes = "application/json", produces = "application/json")
+    @AdminUserAuthorized(requiredRoles = {
+            AdminRole.ROLE_ADMIN_EDIT_SPECIALIST
+    })
+    public AdminSpecialistFindTimeResponse findSpecialistTime(@RequestBody AdminSpecialistFindTime request) {
+
+        Optional<Specialist> specialistByEmail = specialistService.findSpecialistByEmail(request.getSpecialistEmail());
+
+        List<SpecialistTime> specialistTime = specialistTimeService.findSpecialistTime(specialistByEmail.get());
+
+        return new AdminSpecialistFindTimeResponse(ResultCodes.OK_RESPONSE, specialistTime);
+    }
+
+
 
 }
 

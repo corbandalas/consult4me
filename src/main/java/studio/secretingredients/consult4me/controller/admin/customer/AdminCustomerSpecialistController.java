@@ -264,7 +264,7 @@ public class AdminCustomerSpecialistController {
 
 
     @PostMapping(
-            value = "/admin/specialist/addTime", consumes = "application/json", produces = "application/json")
+            value = "/admin/specialist/getTime", consumes = "application/json", produces = "application/json")
     @AdminUserAuthorized(requiredRoles = {
             AdminRole.ROLE_ADMIN_EDIT_SPECIALIST
     })

@@ -285,8 +285,6 @@ public class AdminCustomerSpecialistController {
     })
     public AdminSpecialistTimeResponse updateSpecialistTime(@RequestBody AdminSpecialistUpdateTime request) {
 
-        Optional<Specialist> specialistByEmail = specialistService.findSpecialistByEmail(request.getSpecialistEmail());
-
         SpecialistTime specialistTime = specialistTimeService.findById(request.getId());
 
         specialistTime.setStartDate(request.getStartDate());

@@ -18,14 +18,8 @@ import studio.secretingredients.consult4me.controller.frontend.profile.dto.Speci
 import studio.secretingredients.consult4me.controller.frontend.profile.dto.SpecialistUpdate;
 import studio.secretingredients.consult4me.controller.frontend.register.dto.SpecialistRegisterResponse;
 import studio.secretingredients.consult4me.controller.frontend.register.dto.SpecialistSpecialisation;
-import studio.secretingredients.consult4me.domain.Account;
-import studio.secretingredients.consult4me.domain.AdminRole;
-import studio.secretingredients.consult4me.domain.Specialisation;
-import studio.secretingredients.consult4me.domain.Specialist;
-import studio.secretingredients.consult4me.service.AccountService;
-import studio.secretingredients.consult4me.service.CustomerService;
-import studio.secretingredients.consult4me.service.SpecialisationService;
-import studio.secretingredients.consult4me.service.SpecialistService;
+import studio.secretingredients.consult4me.domain.*;
+import studio.secretingredients.consult4me.service.*;
 import studio.secretingredients.consult4me.util.SecurityUtil;
 
 import java.util.*;
@@ -48,6 +42,9 @@ public class AdminCustomerSpecialistController {
 
     @Autowired
     SpecialisationService specialisationService;
+
+    @Autowired
+    SpecialistTimeService specialistTimeService;
 
 
     @PostMapping(
@@ -233,7 +230,7 @@ public class AdminCustomerSpecialistController {
     @PostMapping(
             value = "/admin/specialist/categories", consumes = "application/json", produces = "application/json")
     @AdminUserAuthorized(requiredRoles = {
-            AdminRole.ROLE_ADMIN_CUSTOMER_LIST
+            AdminRole.ROLE_ADMIN_EDIT_CATEGORIES
     })
     public AdminSpecialistCategoriesResponse specialistCategories(@RequestBody AdminSpecialistCategories request) {
 
@@ -242,6 +239,27 @@ public class AdminCustomerSpecialistController {
         Specialist specialist = specialistByEmail.get();
 
         return new AdminSpecialistCategoriesResponse(ResultCodes.OK_RESPONSE, specialist.getSpecialisations());
+    }
+
+    @PostMapping(
+            value = "/admin/specialist/addTime", consumes = "application/json", produces = "application/json")
+    @AdminUserAuthorized(requiredRoles = {
+            AdminRole.ROLE_ADMIN_EDIT_SPECIALIST
+    })
+    public AdminSpecialistTimeResponse addTimeToSpecialist(@RequestBody AdminSpecialistAddTime request) {
+
+        Optional<Specialist> specialistByEmail = specialistService.findSpecialistByEmail(request.getSpecialistEmail());
+
+        SpecialistTime specialistTime = new SpecialistTime();
+
+        specialistTime.setSpecialist(specialistByEmail.get());
+        specialistTime.setStartDate(request.getStartDate());
+        specialistTime.setEndDate(request.getEndDate());
+        specialistTime.setFree(true);
+
+        SpecialistTime save = specialistTimeService.save(specialistTime);
+
+        return new AdminSpecialistTimeResponse(ResultCodes.OK_RESPONSE, save);
     }
 
 

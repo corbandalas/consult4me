@@ -23,6 +23,7 @@ public enum AdminRole {
     ROLE_ADMIN_CUSTOMER_LIST("Allows to view customer list"),
     ROLE_ADMIN_ADD_SPECIALIST("Allows to add specialist"),
     ROLE_ADMIN_EDIT_SPECIALIST("Allows to edit specialist"),
+    ROLE_ADMIN_EDIT_CATEGORIES("Allows to edit categories"),
 
     ;
 

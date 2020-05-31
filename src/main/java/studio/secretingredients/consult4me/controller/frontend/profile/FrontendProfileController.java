@@ -209,9 +209,7 @@ public class FrontendProfileController {
 
     @PostMapping(
             value = "/frontend/specialist/getTime", consumes = "application/json", produces = "application/json")
-    @AdminUserAuthorized(requiredRoles = {
-            AdminRole.ROLE_ADMIN_EDIT_SPECIALIST
-    })
+    @SpecialistAuthorized
     public AdminSpecialistFindTimeResponse findSpecialistTime(@RequestBody BaseTokenRequest request) {
 
         Specialist specialist = cacheProvider.getSpecialistToken(request.getToken()).getSpecialist();
@@ -224,9 +222,7 @@ public class FrontendProfileController {
 
     @PostMapping(
             value = "/frontend/specialist/updateTime", consumes = "application/json", produces = "application/json")
-    @AdminUserAuthorized(requiredRoles = {
-            AdminRole.ROLE_ADMIN_EDIT_SPECIALIST
-    })
+    @SpecialistAuthorized
     public AdminSpecialistTimeResponse updateSpecialistTime(@RequestBody FrontendSpecialistUpdateTime request) {
 
         SpecialistTime specialistTime = specialistTimeService.findById(request.getId());
@@ -241,7 +237,7 @@ public class FrontendProfileController {
     }
 
     @PostMapping(
-            value = "/frontend/specialist/getTimeList", consumes = "application/json", produces = "application/json")
+            value = "/frontend/customer/getSpecialistTime", consumes = "application/json", produces = "application/json")
     @CustomerAuthorized
     public FrontendSpecialistTimeListResponse getSpecialistTimeList(@RequestBody FrontendSpecialistTimeList request) {
 

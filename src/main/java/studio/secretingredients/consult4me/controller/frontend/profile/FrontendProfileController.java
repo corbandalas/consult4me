@@ -25,6 +25,7 @@ import studio.secretingredients.consult4me.util.SecurityUtil;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @Slf4j
@@ -154,7 +155,7 @@ public class FrontendProfileController {
     @ApiImplicitParams(value = {
             @ApiImplicitParam(value = "SHA256(accountID+privateKey)"
                     , name = "checksum")})
-    public CategoriesListResponse login(@RequestBody CategoriesList categoriesList) {
+    public CategoriesListResponse categoriesList(@RequestBody CategoriesList categoriesList) {
 
         try {
 
@@ -237,6 +238,22 @@ public class FrontendProfileController {
         SpecialistTime save = specialistTimeService.save(specialistTime);
 
         return new AdminSpecialistTimeResponse(ResultCodes.OK_RESPONSE, save);
+    }
+
+    @PostMapping(
+            value = "/frontend/specialist/getTimeList", consumes = "application/json", produces = "application/json")
+    @CustomerAuthorized
+    public FrontendSpecialistTimeListResponse getSpecialistTimeList(@RequestBody FrontendSpecialistTimeList request) {
+
+
+        Optional<Specialist> specialistByEmail = specialistService.findSpecialistByEmail(request.getSpecialistEmail());
+
+        Specialist specialist = specialistByEmail.get();
+
+        List<SpecialistTime> specialistTime = specialistTimeService.findSpecialistTime(specialist);
+
+
+        return new FrontendSpecialistTimeListResponse(ResultCodes.OK_RESPONSE, specialistTime);
     }
 
     @PostMapping(

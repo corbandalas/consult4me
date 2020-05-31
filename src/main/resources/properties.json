@@ -3,5 +3,11 @@
     "key": "studio.secretingredients.info.email",
     "value": "corbandalas@me.com",
     "description": "Email with information about new partner registration etc."
+  },
+
+  {
+    "key": "studio.secretingredients.fee.percent",
+    "value": "5.0",
+    "description": "Specialist fee %"
   }
 ]

@@ -23,8 +23,8 @@ import studio.secretingredients.consult4me.domain.*;
 import studio.secretingredients.consult4me.service.*;
 import studio.secretingredients.consult4me.util.SecurityUtil;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @Slf4j
@@ -47,6 +47,12 @@ public class FrontendProfileController {
 
     @Autowired
     SpecialistTimeService specialistTimeService;
+
+    @Autowired
+    SessionService sessionService;
+
+    @Autowired
+    PropertyService propertyService;
 
 
     @PostMapping(
@@ -231,6 +237,35 @@ public class FrontendProfileController {
         SpecialistTime save = specialistTimeService.save(specialistTime);
 
         return new AdminSpecialistTimeResponse(ResultCodes.OK_RESPONSE, save);
+    }
+
+    @PostMapping(
+            value = "/frontend/customer/initSession", consumes = "application/json", produces = "application/json")
+    @CustomerAuthorized
+    public FrontendSpecialistInitSessionResponse initSession(@RequestBody FrontendSpecialistInitSession request) {
+
+        SpecialistTime specialistTime = specialistTimeService.findById(request.getSpecialistTimeID());
+
+        Specialist specialist = specialistService.findSpecialistByEmail(request.getSpecialistEmail()).get();
+
+
+        Session session = new Session();
+        session.setCustomer(cacheProvider.getCustomerToken(request.getToken()).getCustomer());
+
+        session.setCurrency(specialist.getCurrency());
+        session.setPrice(specialist.getPriceHour());
+        session.setOrderedDate(new Date());
+        session.setSpecialist(specialist);
+        session.setSpecialistTime(specialistTime);
+        session.setSessionState(SessionState.ORDERED);
+
+        float feePrice = Float.parseFloat(propertyService.findPropertyByKey("studio.secretingredients.fee.percent").getValue()) * specialist.getPriceHour();
+
+        session.setFee((long)(feePrice * 100));
+
+        Session save = sessionService.save(session);
+
+        return new FrontendSpecialistInitSessionResponse(ResultCodes.OK_RESPONSE, save);
     }
 
 }

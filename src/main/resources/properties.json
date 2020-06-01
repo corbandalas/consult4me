@@ -9,5 +9,17 @@
     "key": "studio.secretingredients.fee.percent",
     "value": "5.0",
     "description": "Specialist fee %"
+  },
+
+  {
+    "key": "studio.secretingredients.liqpay.private.key",
+    "value": "5.0",
+    "description": "Liqpay private key"
+  },
+
+  {
+    "key": "studio.secretingredients.liqpay.public.key",
+    "value": "5.0",
+    "description": "Liqpay public key"
   }
 ]

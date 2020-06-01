@@ -20,10 +20,12 @@ import studio.secretingredients.consult4me.controller.admin.customer.dto.*;
 import studio.secretingredients.consult4me.controller.frontend.profile.dto.*;
 import studio.secretingredients.consult4me.controller.frontend.register.dto.SpecialistSpecialisation;
 import studio.secretingredients.consult4me.domain.*;
+import studio.secretingredients.consult4me.integration.api.liqpay.LiqPay;
 import studio.secretingredients.consult4me.service.*;
 import studio.secretingredients.consult4me.util.SecurityUtil;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -277,6 +279,19 @@ public class FrontendProfileController {
         session.setFee((long)(feePrice * 100));
 
         Session save = sessionService.save(session);
+
+
+        HashMap<String, String> params = new HashMap<String, String>();
+        params.put("action", "pay");
+        params.put("amount", "1");
+        params.put("currency", "USD");
+        params.put("description", "description text");
+        params.put("order_id", "order_id_1");
+        params.put("version", "3");
+        LiqPay liqpay = new LiqPay(propertyService.findPropertyByKey("studio.secretingredients.liqpay.public.key").getValue(),
+                propertyService.findPropertyByKey("studio.secretingredients.liqpay.private.key").getValue());
+        String html = liqpay.cnb_form(params);
+        System.out.println(html);
 
         return new FrontendSpecialistInitSessionResponse(ResultCodes.OK_RESPONSE, save);
     }

@@ -2,10 +2,7 @@ package studio.secretingredients.consult4me.domain;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -19,6 +16,7 @@ import java.util.Date;
 public class SpecialistTime {
 
     @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne

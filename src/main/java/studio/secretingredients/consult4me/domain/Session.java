@@ -16,6 +16,7 @@ import java.util.Date;
 public class Session {
 
     @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne

@@ -46,5 +46,8 @@ public class Session {
     @Column
     private String currency;
 
+    @Column
+    private String orderID;
+
 }
 

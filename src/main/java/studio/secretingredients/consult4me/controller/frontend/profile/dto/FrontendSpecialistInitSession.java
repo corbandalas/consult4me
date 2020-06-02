@@ -17,4 +17,6 @@ public class FrontendSpecialistInitSession extends BaseTokenRequest {
 
     private long specialistTimeID;
 
+    private String successURL;
+
 }

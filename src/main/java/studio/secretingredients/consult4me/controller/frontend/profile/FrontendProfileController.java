@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import studio.secretingredients.consult4me.CacheProvider;
-import studio.secretingredients.consult4me.authorization.admin.AdminUserAuthorized;
 import studio.secretingredients.consult4me.authorization.customer.CustomerAuthorized;
 import studio.secretingredients.consult4me.authorization.customer.CustomerToken;
 import studio.secretingredients.consult4me.authorization.specialist.SpecialistAuthorized;
 import studio.secretingredients.consult4me.authorization.specialist.SpecialistToken;
 import studio.secretingredients.consult4me.controller.BaseTokenRequest;
 import studio.secretingredients.consult4me.controller.ResultCodes;
-import studio.secretingredients.consult4me.controller.admin.customer.dto.*;
+import studio.secretingredients.consult4me.controller.admin.customer.dto.AdminSpecialistFindTimeResponse;
+import studio.secretingredients.consult4me.controller.admin.customer.dto.AdminSpecialistTimeResponse;
 import studio.secretingredients.consult4me.controller.frontend.profile.dto.*;
 import studio.secretingredients.consult4me.controller.frontend.register.dto.SpecialistSpecialisation;
 import studio.secretingredients.consult4me.domain.*;
@@ -100,7 +100,7 @@ public class FrontendProfileController {
                     || StringUtils.isBlank(request.getFirstName())
                     || StringUtils.isBlank(request.getLastName())
                     || StringUtils.isBlank(request.getPhone())
-            ) {
+                    ) {
                 return new SpecialistGetResponse(ResultCodes.WRONG_REQUEST, null);
             }
 
@@ -128,7 +128,7 @@ public class FrontendProfileController {
 //            }
 
             if (request.getSpecialisations() != null && request.getSpecialisations().size() > 0) {
-                for (SpecialistSpecialisation specialistSpecialisation: request.getSpecialisations()) {
+                for (SpecialistSpecialisation specialistSpecialisation : request.getSpecialisations()) {
                     Specialisation specialisation = specialisationService.findById(specialistSpecialisation.getId());
 
                     specialisation.getSpecialists().add(specialist);
@@ -148,8 +148,6 @@ public class FrontendProfileController {
 
         return new SpecialistGetResponse(ResultCodes.GENERAL_ERROR, null);
     }
-
-
 
 
     @PostMapping(
@@ -259,6 +257,15 @@ public class FrontendProfileController {
     @CustomerAuthorized
     public FrontendSpecialistInitSessionResponse initSession(@RequestBody FrontendSpecialistInitSession request) {
 
+
+        if (request == null
+                || StringUtils.isBlank(request.getSpecialistEmail())
+                || StringUtils.isBlank(request.getSuccessURL())
+                || request.getSpecialistTimeID() <= 0
+                ) {
+            return new FrontendSpecialistInitSessionResponse(ResultCodes.WRONG_REQUEST, null, null);
+        }
+
         SpecialistTime specialistTime = specialistTimeService.findById(request.getSpecialistTimeID());
 
         Specialist specialist = specialistService.findSpecialistByEmail(request.getSpecialistEmail()).get();
@@ -273,27 +280,34 @@ public class FrontendProfileController {
         session.setSpecialist(specialist);
         session.setSpecialistTime(specialistTime);
         session.setSessionState(SessionState.ORDERED);
+        session.setOrderID("" + System.currentTimeMillis());
 
         float feePrice = Float.parseFloat(propertyService.findPropertyByKey("studio.secretingredients.fee.percent").getValue()) * specialist.getPriceHour();
 
-        session.setFee((long)(feePrice * 100));
+
+        long fee = (long) (feePrice * 100);
+
+        session.setFee(fee);
+        session.setTotalPrice(specialist.getPriceHour() + fee);
 
         Session save = sessionService.save(session);
 
 
-        HashMap<String, String> params = new HashMap<String, String>();
+        HashMap<String, String> params = new HashMap<>();
         params.put("action", "pay");
-        params.put("amount", "1");
-        params.put("currency", "USD");
-        params.put("description", "description text");
-        params.put("order_id", "order_id_1");
+        params.put("amount", "" + (float) ((specialist.getPriceHour() + fee) / 100));
+        params.put("currency", specialist.getCurrency());
+        params.put("description", "Session pay");
+        params.put("order_id", session.getOrderID());
         params.put("version", "3");
+        params.put("server_url",  propertyService.findPropertyByKey("studio.secretingredients.liqpay.callback.url").getValue());
+        params.put("result_url", request.getSuccessURL());
+
         LiqPay liqpay = new LiqPay(propertyService.findPropertyByKey("studio.secretingredients.liqpay.public.key").getValue(),
                 propertyService.findPropertyByKey("studio.secretingredients.liqpay.private.key").getValue());
         String html = liqpay.cnb_form(params);
-        System.out.println(html);
 
-        return new FrontendSpecialistInitSessionResponse(ResultCodes.OK_RESPONSE, save);
+        return new FrontendSpecialistInitSessionResponse(ResultCodes.OK_RESPONSE, save, html);
     }
 
 }

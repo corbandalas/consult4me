@@ -21,5 +21,11 @@
     "key": "studio.secretingredients.liqpay.public.key",
     "value": "5.0",
     "description": "Liqpay public key"
-  }
+  },
+
+  {
+    "key": "studio.secretingredients.liqpay.callback.url",
+    "value": "https://google.com",
+    "description": "Liqpay callback url"
+  },
 ]

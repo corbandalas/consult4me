@@ -13,4 +13,6 @@ public class FrontendSpecialistInitSessionResponse {
 
     private Session session;
 
+    private String redirectHtml;
+
 }

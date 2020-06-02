@@ -1,5 +1,6 @@
 package studio.secretingredients.consult4me.repository;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import studio.secretingredients.consult4me.domain.Specialist;
@@ -18,6 +19,8 @@ import java.util.List;
 
 @Repository
 public interface SpecialistTimeRepository extends CrudRepository<SpecialistTime, Long> {
-     List<SpecialistTime> findBySpecialist(Specialist specialist);
-     List<SpecialistTime> findStartDateAfterStartAndEndDateBeforeEndBySpecialist(Date start, Date end, Specialist specialist);
+    List<SpecialistTime> findBySpecialist(Specialist specialist);
+
+    @Query("select a from specialist_time a where a.startDate >= :start and a.endDate <= end and a.specialist.email = specialist.email")
+    List<SpecialistTime> findAllByStartDateAfterStartAndEndDateBeforeEndBySpecialist(Date start, Date end, Specialist specialist);
 }

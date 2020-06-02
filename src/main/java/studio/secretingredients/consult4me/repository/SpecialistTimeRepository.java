@@ -21,6 +21,6 @@ import java.util.List;
 public interface SpecialistTimeRepository extends CrudRepository<SpecialistTime, Long> {
     List<SpecialistTime> findBySpecialist(Specialist specialist);
 
-    @Query("select a from specialist_time a where a.startDate >= :start and a.endDate <= end and a.specialist.email = specialist.email")
-    List<SpecialistTime> findAllByStartDateAfterStartAndEndDateBeforeEndBySpecialist(Date start, Date end, Specialist specialist);
+    @Query("select a from specialist_time a where a.startDate >= :startPeriod and a.endDate <= endPeriod and a.specialist.email = specialist.email")
+    List<SpecialistTime> findAllByStartDateAfterStartAndEndDateBeforeEndBySpecialist(Date startPeriod, Date endPeriod, Specialist specialist);
 }

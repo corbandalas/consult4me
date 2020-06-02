@@ -30,6 +30,10 @@ public class SpecialistTimeService {
         return specialistTimeRepository.findBySpecialist(specialist);
     }
 
+    public  List<SpecialistTime> findStartDateAfterStartAndEndDateBeforeEndBySpecialist(Date start, Date end, Specialist specialist) {
+        return specialistTimeRepository.findStartDateAfterStartAndEndDateBeforeEndBySpecialist(start, end, specialist);
+    }
+
     public SpecialistTime findById(long id) {
         return specialistTimeRepository.findById(id).get();
     }

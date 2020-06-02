@@ -10,4 +10,8 @@ public class AdminSpecialistFindTime extends BaseTokenRequest {
 
     private String specialistEmail;
 
+    private Date startSearchPeriod;
+
+    private Date endSearchPeriod;
+
 }

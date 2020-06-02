@@ -18,5 +18,6 @@ import java.util.List;
 
 @Repository
 public interface SpecialistTimeRepository extends CrudRepository<SpecialistTime, Long> {
-    public List<SpecialistTime> findBySpecialist(Specialist specialist);
+     List<SpecialistTime> findBySpecialist(Specialist specialist);
+     List<SpecialistTime> findStartDateAfterStartAndEndDateBeforeEndBySpecialist(Date start, Date end, Specialist specialist);
 }

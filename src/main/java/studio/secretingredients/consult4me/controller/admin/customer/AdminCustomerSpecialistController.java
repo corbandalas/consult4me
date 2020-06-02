@@ -272,7 +272,14 @@ public class AdminCustomerSpecialistController {
 
         Optional<Specialist> specialistByEmail = specialistService.findSpecialistByEmail(request.getSpecialistEmail());
 
-        List<SpecialistTime> specialistTime = specialistTimeService.findSpecialistTime(specialistByEmail.get());
+        List<SpecialistTime> specialistTime = null;
+
+        if (request.getStartSearchPeriod() != null && request.getEndSearchPeriod() != null ) {
+            specialistTime = specialistTimeService.findStartDateAfterStartAndEndDateBeforeEndBySpecialist(request.getStartSearchPeriod(),
+                    request.getEndSearchPeriod(), specialistByEmail.get());
+        } else {
+            specialistTime = specialistTimeService.findSpecialistTime(specialistByEmail.get());
+        }
 
         return new AdminSpecialistFindTimeResponse(ResultCodes.OK_RESPONSE, specialistTime);
     }

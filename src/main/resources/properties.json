@@ -28,4 +28,10 @@
     "value": "https://google.com",
     "description": "Liqpay callback url"
   },
+
+  {
+    "key": "studio.secretingredients.liqpay.sandbox",
+    "value": "true",
+    "description": "Indicate whether using Liqpay sandbox mode"
+  }
 ]

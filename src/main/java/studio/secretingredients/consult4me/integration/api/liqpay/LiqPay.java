@@ -150,7 +150,7 @@ public class LiqPay implements LiqPayApi {
             throw new NullPointerException("description can't be null");
     }
 
-    protected String str_to_sign(String str) {
+    public String str_to_sign(String str) {
         return base64_encode(sha1(str));
     }
 

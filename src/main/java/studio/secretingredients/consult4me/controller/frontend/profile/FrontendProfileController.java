@@ -300,14 +300,46 @@ public class FrontendProfileController {
         params.put("description", "Session pay");
         params.put("order_id", session.getOrderID());
         params.put("version", "3");
-        params.put("server_url",  propertyService.findPropertyByKey("studio.secretingredients.liqpay.callback.url").getValue());
+        params.put("server_url", propertyService.findPropertyByKey("studio.secretingredients.liqpay.callback.url").getValue());
         params.put("result_url", request.getSuccessURL());
 
         LiqPay liqpay = new LiqPay(propertyService.findPropertyByKey("studio.secretingredients.liqpay.public.key").getValue(),
                 propertyService.findPropertyByKey("studio.secretingredients.liqpay.private.key").getValue());
+
+        liqpay.setCnbSandbox(Boolean.parseBoolean(propertyService.findPropertyByKey("studio.secretingredients.liqpay.sandbox").getValue()));
+
         String html = liqpay.cnb_form(params);
 
         return new FrontendSpecialistInitSessionResponse(ResultCodes.OK_RESPONSE, save, html);
+    }
+
+    @PostMapping(
+            value = "/frontend/customer/liqpay/callback", consumes = "application/json", produces = "application/json")
+    public FrontendSpecialistInitSessionResponse callback(@RequestBody FrontendLiqpayCallback request) {
+
+
+        String publicKey = propertyService.findPropertyByKey("studio.secretingredients.liqpay.public.key").getValue();
+
+        String privateKey = propertyService.findPropertyByKey("studio.secretingredients.liqpay.private.key").getValue();
+
+        LiqPay liqpay = new LiqPay(publicKey, privateKey);
+
+        liqpay.setCnbSandbox(Boolean.parseBoolean(propertyService.findPropertyByKey("studio.secretingredients.liqpay.sandbox").getValue()));
+
+        String sign = liqpay.str_to_sign(
+                privateKey +
+                        request.getData() +
+                        privateKey);
+
+        if (!sign.equalsIgnoreCase(request.getSignature())) {
+            log.error("LiqPay callback error. Signature mismastch" );
+            return null;
+        }
+
+
+        log.info("Liqpay decoded response: " + SecurityUtil.decodeString(request.getData()));
+
+        return null;
     }
 
 }

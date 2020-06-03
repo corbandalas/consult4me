@@ -30,7 +30,7 @@ public class SessionService {
         return sessionRepository.findBySpecialist(specialist);
     }
     public List<Session> findByState(SessionState sessionState) {
-        return findByState(sessionState);
+        return sessionRepository.findBySessionState(sessionState);
     }
 
 }

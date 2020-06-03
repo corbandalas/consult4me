@@ -21,5 +21,5 @@ import java.util.List;
 public interface SessionRepository extends CrudRepository<Session, Long> {
     List<Session> findByCustomer(Customer customer);
     List<Session> findBySpecialist(Specialist specialist);
-    List<Session> findByState(SessionState sessionState);
+    List<Session> findBySessionState(SessionState sessionState);
 }

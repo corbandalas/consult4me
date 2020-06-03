@@ -24,6 +24,7 @@ public enum AdminRole {
     ROLE_ADMIN_ADD_SPECIALIST("Allows to add specialist"),
     ROLE_ADMIN_EDIT_SPECIALIST("Allows to edit specialist"),
     ROLE_ADMIN_EDIT_CATEGORIES("Allows to edit categories"),
+    ROLE_ADMIN_VIEW_SESSIONS("Allows to view customer/specialist sessions"),
 
     ;
 

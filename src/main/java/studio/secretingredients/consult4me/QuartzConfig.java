@@ -9,6 +9,7 @@ import org.quartz.Trigger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.quartz.*;
 
 import javax.sql.DataSource;
@@ -39,6 +40,9 @@ public class QuartzConfig {
         Properties properties = new Properties();
         properties.setProperty("org.quartz.scheduler.instanceName", "MyInstanceName");
         properties.setProperty("org.quartz.scheduler.instanceId", "Instance1");
+        properties.setProperty("org.quartz.jobStore.driverDelegateClass", "org.quartz.impl.jdbcjobstore.PostgreSQLDelegate");
+
+//        schedulerFactory.setConfigLocation(new ClassPathResource("quartz.properties"));
         schedulerFactory.setOverwriteExistingJobs(true);
         schedulerFactory.setAutoStartup(true);
         schedulerFactory.setQuartzProperties(properties);

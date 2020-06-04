@@ -79,7 +79,9 @@ public class FrontendProfileController {
 
         Specialist specialist = specialistToken.getSpecialist();
 
-        return new SpecialistGetResponse(ResultCodes.OK_RESPONSE, specialistService.findSpecialistByEmail(specialist.getEmail()).get());
+        Specialist specialist1 = specialistService.findSpecialistByEmail(specialist.getEmail()).get();
+
+        return new SpecialistGetResponse(ResultCodes.OK_RESPONSE, specialist1, specialist1.getSpecialisations());
     }
 
     @PostMapping(
@@ -101,7 +103,7 @@ public class FrontendProfileController {
                     || StringUtils.isBlank(request.getLastName())
                     || StringUtils.isBlank(request.getPhone())
                     ) {
-                return new SpecialistGetResponse(ResultCodes.WRONG_REQUEST, null);
+                return new SpecialistGetResponse(ResultCodes.WRONG_REQUEST, null, null);
             }
 
             SpecialistToken specialistToken = cacheProvider.getSpecialistToken(request.getToken());
@@ -140,13 +142,13 @@ public class FrontendProfileController {
             specialist = specialistService.save(specialist);
 
 
-            return new SpecialistGetResponse(ResultCodes.OK_RESPONSE, specialist);
+            return new SpecialistGetResponse(ResultCodes.OK_RESPONSE, specialist, specialist.getSpecialisations());
 
         } catch (Exception e) {
             log.error("Profile controller", e);
         }
 
-        return new SpecialistGetResponse(ResultCodes.GENERAL_ERROR, null);
+        return new SpecialistGetResponse(ResultCodes.GENERAL_ERROR, null, null);
     }
 
 

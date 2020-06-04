@@ -15,6 +15,7 @@ import studio.secretingredients.consult4me.authorization.specialist.SpecialistAu
 import studio.secretingredients.consult4me.authorization.specialist.SpecialistToken;
 import studio.secretingredients.consult4me.controller.BaseTokenRequest;
 import studio.secretingredients.consult4me.controller.ResultCodes;
+import studio.secretingredients.consult4me.controller.admin.customer.dto.AdminSpecialistFindTime;
 import studio.secretingredients.consult4me.controller.admin.customer.dto.AdminSpecialistFindTimeResponse;
 import studio.secretingredients.consult4me.controller.admin.customer.dto.AdminSpecialistTimeResponse;
 import studio.secretingredients.consult4me.controller.frontend.profile.dto.*;
@@ -212,11 +213,18 @@ public class FrontendProfileController {
     @PostMapping(
             value = "/frontend/specialist/getTime", consumes = "application/json", produces = "application/json")
     @SpecialistAuthorized
-    public AdminSpecialistFindTimeResponse findSpecialistTime(@RequestBody BaseTokenRequest request) {
+    public AdminSpecialistFindTimeResponse findSpecialistTime(@RequestBody FrontendSpecialistFindTime request) {
 
         Specialist specialist = cacheProvider.getSpecialistToken(request.getToken()).getSpecialist();
 
-        List<SpecialistTime> specialistTime = specialistTimeService.findSpecialistTime(specialist);
+        List<SpecialistTime> specialistTime = null;
+
+        if (request.getStartSearchPeriod() != null && request.getEndSearchPeriod() != null ) {
+            specialistTime = specialistTimeService.findStartDateAfterStartAndEndDateBeforeEndBySpecialist(request.getStartSearchPeriod(),
+                    request.getEndSearchPeriod(), specialist);
+        } else {
+            specialistTime = specialistTimeService.findSpecialistTime(specialist);
+        }
 
         return new AdminSpecialistFindTimeResponse(ResultCodes.OK_RESPONSE, specialistTime);
     }

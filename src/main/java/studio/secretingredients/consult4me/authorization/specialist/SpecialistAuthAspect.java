@@ -33,24 +33,16 @@ public class SpecialistAuthAspect {
     @Before("@annotation(studio.secretingredients.consult4me.authorization.specialist.SpecialistAuthorized) && args(request,..)")
     public void before(JoinPoint joinPoint, BaseTokenRequest request) {
 
-        log.info("SpecialistAuthAspect is working");
-
         if (!(request instanceof BaseTokenRequest)) {
             throw
                     new RuntimeException("Request should be BaseTokenRequest");
         }
 
-        log.info("SpecialistAuthAspect is working1");
-
         SpecialistToken authorization = authorize(request.getToken());
-
-        log.info("SpecialistAuthAspect is working2");
 
         if (authorization == null) {
             throw new RuntimeException("Authorization Token was not found !!!");
         }
-
-        log.info("SpecialistAuthAspect is working3");
 
         Account accountByID = accountService.findAccountByID(authorization.getAccount().getId());
 
@@ -58,15 +50,11 @@ public class SpecialistAuthAspect {
             throw new RuntimeException("Account #" + accountByID.getId() + " is not active");
         }
 
-        log.info("SpecialistAuthAspect is working4");
-
         Optional<Specialist> customerByEmail = specialistService.findSpecialistByEmail(authorization.getSpecialist().getEmail());
 
         if (!customerByEmail.isPresent()) {
             throw new RuntimeException("Specialist # " + authorization.getSpecialist().getEmail() + " is not present");
         }
-
-        log.info("SpecialistAuthAspect is working5");
 
 
         if (customerByEmail.get() != null && !customerByEmail.get().isActive()) {
@@ -77,8 +65,6 @@ public class SpecialistAuthAspect {
             authorization.setAuthorizeDate(new Date());
             cacheProvider.putSpecialistToken(request.getToken(), authorization);
         }
-
-        log.info("SpecialistAuthAspect is working6");
 
     }
 

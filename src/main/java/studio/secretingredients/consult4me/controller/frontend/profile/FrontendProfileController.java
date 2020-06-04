@@ -75,15 +75,9 @@ public class FrontendProfileController {
     @SpecialistAuthorized
     public SpecialistGetResponse get(@RequestBody SpecialistGet request) {
 
-        log.info("/frontend/specialist/get is working");
-
         SpecialistToken specialistToken = cacheProvider.getSpecialistToken(request.getToken());
 
-        log.info("/frontend/specialist/get is working1");
-
         Specialist specialist = specialistToken.getSpecialist();
-
-        log.info("/frontend/specialist/get is working2");
 
         return new SpecialistGetResponse(ResultCodes.OK_RESPONSE, specialistService.findSpecialistByEmail(specialist.getEmail()).get());
     }

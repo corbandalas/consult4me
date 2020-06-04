@@ -78,6 +78,8 @@ public class SpecialistAuthAspect {
             cacheProvider.putSpecialistToken(request.getToken(), authorization);
         }
 
+        log.info("SpecialistAuthAspect is working6");
+
     }
 
 

@@ -182,7 +182,7 @@ public class AdminCustomerSpecialistController {
             specialist.setPan(request.getPan());
             specialist.setCurrency(request.getCurrency());
             specialist.setBirthDate(request.getBirthDate());
-            if (StringUtils.isBlank(request.getHashedPassword())) {
+            if (StringUtils.isNotBlank(request.getHashedPassword())) {
                 specialist.setHashedPassword(request.getHashedPassword());
             }
 

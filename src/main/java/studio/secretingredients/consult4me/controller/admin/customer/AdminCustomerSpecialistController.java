@@ -165,7 +165,7 @@ public class AdminCustomerSpecialistController {
                     || StringUtils.isBlank(request.getLastName())
                     || StringUtils.isBlank(request.getPhone())
                     ) {
-                return new SpecialistGetResponse(ResultCodes.WRONG_REQUEST, null);
+                return new SpecialistGetResponse(ResultCodes.WRONG_REQUEST, null, null);
             }
 
             Specialist specialist = specialistService.findSpecialistByEmail(request.getSpecialistEmail()).get();
@@ -207,13 +207,13 @@ public class AdminCustomerSpecialistController {
             specialist = specialistService.save(specialist);
 
 
-            return new SpecialistGetResponse(ResultCodes.OK_RESPONSE, specialist);
+            return new SpecialistGetResponse(ResultCodes.OK_RESPONSE, specialist, specialist.getSpecialisations());
 
         } catch (Exception e) {
             log.error("Profile controller", e);
         }
 
-        return new SpecialistGetResponse(ResultCodes.GENERAL_ERROR, null);
+        return new SpecialistGetResponse(ResultCodes.GENERAL_ERROR, null, null);
     }
 
 

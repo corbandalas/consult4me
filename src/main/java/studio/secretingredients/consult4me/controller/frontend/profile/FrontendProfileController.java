@@ -13,9 +13,7 @@ import studio.secretingredients.consult4me.authorization.customer.CustomerAuthor
 import studio.secretingredients.consult4me.authorization.customer.CustomerToken;
 import studio.secretingredients.consult4me.authorization.specialist.SpecialistAuthorized;
 import studio.secretingredients.consult4me.authorization.specialist.SpecialistToken;
-import studio.secretingredients.consult4me.controller.BaseTokenRequest;
 import studio.secretingredients.consult4me.controller.ResultCodes;
-import studio.secretingredients.consult4me.controller.admin.customer.dto.AdminSpecialistFindTime;
 import studio.secretingredients.consult4me.controller.admin.customer.dto.AdminSpecialistFindTimeResponse;
 import studio.secretingredients.consult4me.controller.admin.customer.dto.AdminSpecialistTimeResponse;
 import studio.secretingredients.consult4me.controller.frontend.profile.dto.*;
@@ -25,10 +23,7 @@ import studio.secretingredients.consult4me.integration.api.liqpay.LiqPay;
 import studio.secretingredients.consult4me.service.*;
 import studio.secretingredients.consult4me.util.SecurityUtil;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @Slf4j
@@ -120,6 +115,8 @@ public class FrontendProfileController {
             specialist.setPhoto(request.getPhoto());
             specialist.setPhone(request.getPhone());
             specialist.setPan(request.getPan());
+            specialist.setLastName(request.getLastName());
+            specialist.setFirstName(request.getFirstName());
             specialist.setCurrency(request.getCurrency());
             specialist.setBirthDate(request.getBirthDate());
             if (StringUtils.isNotBlank(request.getHashedPassword())) {
@@ -130,14 +127,20 @@ public class FrontendProfileController {
 //                specialist.setSpecialisations(request.getSpecialisations());
 //            }
 
+
+            Set<Specialisation> specialisations = new HashSet<>();
+
             if (request.getSpecialisations() != null && request.getSpecialisations().size() > 0) {
-                for (SpecialistSpecialisation specialistSpecialisation : request.getSpecialisations()) {
+                for (SpecialistSpecialisation specialistSpecialisation: request.getSpecialisations()) {
+
                     Specialisation specialisation = specialisationService.findById(specialistSpecialisation.getId());
 
-                    specialisation.getSpecialists().add(specialist);
+                    specialisations.add(specialisation);
 
-                    specialisationService.save(specialisation);
                 }
+
+                specialist.setSpecialisations(specialisations);
+
             }
 
             specialist = specialistService.save(specialist);

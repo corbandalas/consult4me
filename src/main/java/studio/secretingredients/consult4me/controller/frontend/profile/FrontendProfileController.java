@@ -97,7 +97,7 @@ public class FrontendProfileController {
                     || StringUtils.isBlank(request.getDescriptionShort())
                     || StringUtils.isBlank(request.getEducation())
                     || StringUtils.isBlank(request.getPan())
-                    || request.getPriceHour() > 0
+                    || request.getPriceHour() <  0
                     || StringUtils.isBlank(request.getCurrency())
                     || StringUtils.isBlank(request.getSocialProfile())
                     || StringUtils.isBlank(request.getFirstName())

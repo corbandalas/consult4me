@@ -213,8 +213,6 @@ public class FrontendCustomerRegisterController {
                 specialist.setSpecialisations(specialisations);
             }
 
-
-
             Specialist save = specialistService.save(specialist);
 
             emailSender.sendSpecialistRegistration(customerRegister.getEmail(), customerRegister.getFirstName() + " " + customerRegister.getLastName() );

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import studio.secretingredients.consult4me.controller.ResultCodes;
 import studio.secretingredients.consult4me.controller.frontend.register.dto.*;
 import studio.secretingredients.consult4me.domain.*;
+import studio.secretingredients.consult4me.mail.EmailSender;
 import studio.secretingredients.consult4me.service.AccountService;
 import studio.secretingredients.consult4me.service.CustomerService;
 import studio.secretingredients.consult4me.service.SpecialisationService;
@@ -27,9 +28,6 @@ public class FrontendCustomerRegisterController {
     @Autowired
     CustomerService customerService;
 
-//    @Autowired
-//    CacheProvider cacheProvider;
-
     @Autowired
     AccountService accountService;
 
@@ -38,6 +36,9 @@ public class FrontendCustomerRegisterController {
 
     @Autowired
     SpecialisationService specialisationService;
+
+    @Autowired
+    EmailSender emailSender;
 
     @PostMapping(
             value = "/frontend/customer/register", consumes = "application/json", produces = "application/json")
@@ -116,9 +117,7 @@ public class FrontendCustomerRegisterController {
 
             customerService.save(customer);
 
-//            CustomerToken customerToken = new CustomerToken(token, customer, new Date());
-
-//            cacheProvider.putCustomerToken(token, customerToken);
+            emailSender.sendCustomerRegistration(customerRegister.getEmail(), customerRegister.getFirstName() + " " + customerRegister.getLastName(), generatedPassword);
 
             return new CustomerRegisterResponse(ResultCodes.OK_RESPONSE);
 
@@ -193,10 +192,7 @@ public class FrontendCustomerRegisterController {
             specialist.setPriceHour(customerRegister.getPriceHour());
             specialist.setPan(customerRegister.getPan());
 
-//            String generatedPassword = RandomStringUtils.randomNumeric(6);
             specialist.setHashedPassword(customerRegister.getHashedPassword());
-
-//            log.info("Generated password for specialist [" + customerRegister.getEmail() + "] = " + generatedPassword);
 
             //TODO: Sending SMS/email with generated password
 
@@ -215,26 +211,15 @@ public class FrontendCustomerRegisterController {
                 }
 
                 specialist.setSpecialisations(specialisations);
-//
-//
-//                    specialisation.getSpecialists().add(save);
-//
-//                    specialisationService.save(specialisation);
-//                }
-
-//                specialist.setSpecialisations(customerRegister.getSpecialisations());
             }
 
 
 
             Specialist save = specialistService.save(specialist);
 
+            emailSender.sendSpecialistRegistration(customerRegister.getEmail(), customerRegister.getFirstName() + " " + customerRegister.getLastName() );
 
-
-
-//            CustomerToken customerToken = new CustomerToken(token, customer, new Date());
-
-//            cacheProvider.putCustomerToken(token, customerToken);
+            emailSender.sendSpecialistRegistrationToAdmin(customerRegister.getEmail(), customerRegister.getFirstName() + " " + customerRegister.getLastName(), specialisations);
 
             return new SpecialistRegisterResponse(ResultCodes.OK_RESPONSE);
 

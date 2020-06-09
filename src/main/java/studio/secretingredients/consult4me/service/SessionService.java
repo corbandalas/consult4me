@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import studio.secretingredients.consult4me.domain.*;
 import studio.secretingredients.consult4me.repository.SessionRepository;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -31,6 +32,10 @@ public class SessionService {
     }
     public List<Session> findByState(SessionState sessionState) {
         return sessionRepository.findBySessionState(sessionState);
+    }
+
+    public List<Session> findBySpecialistTimeStartDateBetween(Date startDate, Date endDate, SessionState sessionState) {
+        return sessionRepository.findBySpecialistTimeStartDateBetweenAndSessionState(startDate, endDate, sessionState);
     }
 
 }

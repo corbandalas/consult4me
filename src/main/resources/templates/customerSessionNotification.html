@@ -4,11 +4,14 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title>Ваша учетная запись создана успешно</title>
+    <title>Напоминание о консультации</title>
 </head>
 <body>
-<p>Спасибо за регистрацию, </p>
+<p>Уважаемый</p>
 <p th:text="${name}"></p>
-<p>. Пожалуйста, подождите пока ваша запись будет проверена администратором и активирована</p>
+<p>. Напоминаем, что ваш сеанс консультации состоится сегодня :</p>
+<p th:text="${date}"></p>
+<p> Специалист :</p>
+<p th:text="${specialistName}"></p>
 </body>
 <html>

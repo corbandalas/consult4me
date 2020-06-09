@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import studio.secretingredients.consult4me.authorization.admin.AdminUserToken;
 import studio.secretingredients.consult4me.authorization.customer.CustomerToken;
 import studio.secretingredients.consult4me.authorization.specialist.SpecialistToken;
+import studio.secretingredients.consult4me.domain.Session;
 
 import javax.annotation.PostConstruct;
 
@@ -18,6 +19,7 @@ public class CacheProvider {
     CacheAccess<String, AdminUserToken> adminUsertokenCache;
     CacheAccess<String, CustomerToken> customerCache;
     CacheAccess<String, SpecialistToken> specialistCache;
+    CacheAccess<String, Session> paymentSessionCache;
     CacheAccess<String, Object> defaultCache;
 
     @PostConstruct
@@ -33,6 +35,7 @@ public class CacheProvider {
         customerCache = JCS.getInstance("customerCache");
         specialistCache = JCS.getInstance("specialistCache");
         defaultCache = JCS.getInstance("defaultCache");
+        paymentSessionCache = JCS.getInstance("paymentSessionCache");
 
     }
 
@@ -49,6 +52,9 @@ public class CacheProvider {
     public SpecialistToken getSpecialistToken(String key) {
         return specialistCache.get(key);
     }
+    public Session getSession(String key) {
+        return paymentSessionCache.get(key);
+    }
 
     public void putObject(String key, Object object) {
         defaultCache.put(key, object);
@@ -64,6 +70,10 @@ public class CacheProvider {
 
     public void putSpecialistToken(String key, SpecialistToken token) {
         specialistCache.put(key, token);
+    }
+
+    public void putSession(String key, Session session) {
+        paymentSessionCache.put(key, session);
     }
 
 

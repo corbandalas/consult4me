@@ -281,6 +281,10 @@ public class FrontendProfileController {
 
         SpecialistTime specialistTime = specialistTimeService.findById(request.getSpecialistTimeID());
 
+        if (!specialistTime.isFree()) {
+            return new FrontendSpecialistInitSessionResponse(ResultCodes.SPECIALIST_TIME_RESERVED, null, null);
+        }
+
         Specialist specialist = specialistService.findSpecialistByEmail(request.getSpecialistEmail()).get();
 
 
@@ -303,8 +307,11 @@ public class FrontendProfileController {
         session.setFee(fee);
         session.setTotalPrice(specialist.getPriceHour() + fee);
 
+        specialistTime.setFree(false);
+
         Session save = sessionService.save(session);
 
+        specialistTimeService.save(specialistTime);
 
         HashMap<String, String> params = new HashMap<>();
         params.put("action", "pay");
@@ -315,6 +322,8 @@ public class FrontendProfileController {
         params.put("version", "3");
         params.put("server_url", propertyService.findPropertyByKey("studio.secretingredients.liqpay.callback.url").getValue());
         params.put("result_url", request.getSuccessURL());
+
+        cacheProvider.putSession("liqpay" + session.getOrderID(), save);
 
         LiqPay liqpay = new LiqPay(propertyService.findPropertyByKey("studio.secretingredients.liqpay.public.key").getValue(),
                 propertyService.findPropertyByKey("studio.secretingredients.liqpay.private.key").getValue());

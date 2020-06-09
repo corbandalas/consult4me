@@ -1,5 +1,6 @@
 package studio.secretingredients.consult4me.mail;
 
+import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -9,7 +10,9 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import studio.secretingredients.consult4me.domain.Specialisation;
 import studio.secretingredients.consult4me.service.PropertyService;
+import studio.secretingredients.consult4me.util.DateUtil;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -35,6 +38,18 @@ public class EmailSender {
         data.put("password", customerPassword);
 
         initiateEmailSend(toEmail, "Успешная регистрация", "customerRegistration", data);
+    }
+
+    public void sendCustomerSessionNotification(String toEmail, String customerName, Date sessionDate, String specialistName) {
+
+        Map<String, String> data = new HashMap<>();
+
+        data.put("name", customerName);
+        data.put("date", DateUtil.format(sessionDate, "dd-mm-yyyy HH:mm"));
+        data.put("specialistName", specialistName);
+
+
+        initiateEmailSend(toEmail, "Напоминание о консультации", "customerSessionNotification", data);
     }
 
     public void sendSpecialistRegistrationToAdmin(String specialistEmail, String specialistName, Set<Specialisation> specialisations) {

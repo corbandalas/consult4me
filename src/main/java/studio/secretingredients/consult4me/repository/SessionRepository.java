@@ -7,6 +7,7 @@ import studio.secretingredients.consult4me.domain.Session;
 import studio.secretingredients.consult4me.domain.SessionState;
 import studio.secretingredients.consult4me.domain.Specialist;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -22,4 +23,5 @@ public interface SessionRepository extends CrudRepository<Session, Long> {
     List<Session> findByCustomer(Customer customer);
     List<Session> findBySpecialist(Specialist specialist);
     List<Session> findBySessionState(SessionState sessionState);
+    List<Session> findBySpecialistTimeStartDateBetweenAndSessionState(Date startDate, Date endDate, SessionState sessionState);
 }

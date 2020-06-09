@@ -9,6 +9,7 @@ public class ResultCodes {
     public static final String WRONG_USER_PASSWORD = "4";
     public static final String WRONG_CHECKSUM = "5";
     public static final String ALREADY_REGISTERED = "6";
+    public static final String SPECIALIST_TIME_RESERVED = "7";
     public static final String GENERAL_ERROR = "10";
 
 }

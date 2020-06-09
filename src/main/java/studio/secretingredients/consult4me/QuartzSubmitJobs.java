@@ -6,20 +6,19 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
-import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
-import studio.secretingredients.consult4me.trigger.MemberClassStatsJob;
+import studio.secretingredients.consult4me.trigger.SessionNotificationJob;
 
 @Configuration
 public class QuartzSubmitJobs {
    private static final String CRON_EVERY_FIVE_MINUTES = "0 0/5 * ? * * *";
  
-   @Bean(name = "memberClassStats")
-   public JobDetailFactoryBean jobMemberClassStats() {
-       return QuartzConfig.createJobDetail(MemberClassStatsJob.class, "Class Statistics Job");
+   @Bean(name = "sessionNotification")
+   public JobDetailFactoryBean sessionNotification() {
+       return QuartzConfig.createJobDetail(SessionNotificationJob.class, "Session notification Job");
    }
  
-   @Bean(name = "memberClassStatsTrigger")
-   public CronTriggerFactoryBean triggerMemberClassStats(@Qualifier("memberClassStats") JobDetail jobDetail) {
-       return QuartzConfig.createCronTrigger(jobDetail, CRON_EVERY_FIVE_MINUTES, "Class Statistics Trigger");
+   @Bean(name = "sessionNotificationTrigger")
+   public CronTriggerFactoryBean triggerSessionNotification(@Qualifier("sessionNotification") JobDetail jobDetail) {
+       return QuartzConfig.createCronTrigger(jobDetail, CRON_EVERY_FIVE_MINUTES, "Session notification Trigger");
    }
 }

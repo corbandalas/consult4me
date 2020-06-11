@@ -1,6 +1,5 @@
 package studio.secretingredients.consult4me.mail;
 
-import org.apache.commons.lang.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -50,6 +49,30 @@ public class EmailSender {
 
 
         initiateEmailSend(toEmail, "Напоминание о консультации", "customerSessionNotification", data);
+    }
+
+    public void sendCustomerConfirmSessionNotification(String toEmail, String customerName, Date sessionDate, String specialistName, String url) {
+
+        Map<String, String> data = new HashMap<>();
+
+        data.put("name", customerName);
+        data.put("date", DateUtil.format(sessionDate, "dd-mm-yyyy HH:mm"));
+        data.put("specialistName", specialistName);
+        data.put("url", url);
+
+        initiateEmailSend(toEmail, "Подтверждение статусаконсультации", "customerConfirmSessionNotification", data);
+    }
+
+    public void sendSpecialistSessionNotification(String toEmail, String customerName, Date sessionDate, String specialistName) {
+
+        Map<String, String> data = new HashMap<>();
+
+        data.put("name", specialistName);
+        data.put("date", DateUtil.format(sessionDate, "dd-mm-yyyy HH:mm"));
+        data.put("customerName", customerName);
+
+
+        initiateEmailSend(toEmail, "Напоминание о консультации", "specialistSessionNotification", data);
     }
 
     public void sendSpecialistRegistrationToAdmin(String specialistEmail, String specialistName, Set<Specialisation> specialisations) {

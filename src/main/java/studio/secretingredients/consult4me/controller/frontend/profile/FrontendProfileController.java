@@ -298,6 +298,7 @@ public class FrontendProfileController {
         session.setSpecialistTime(specialistTime);
         session.setSessionState(SessionState.ORDERED);
         session.setOrderID("" + System.currentTimeMillis());
+        session.setNotified(false);
 
         float feePrice = Float.parseFloat(propertyService.findPropertyByKey("studio.secretingredients.fee.percent").getValue()) * specialist.getPriceHour();
 

@@ -33,17 +33,36 @@ public class SessionNotificationJob implements Job {
 
        Date currentDate = new Date();
 
-       Date date = DateUtils.addMinutes(currentDate, 30);
+       Date date = DateUtils.addHours(currentDate, 24);
 
        List<Session> sessions = sessionRepository.findBySpecialistTimeStartDateBetweenAndSessionState(currentDate, date, SessionState.PAYED);
 
        for (Session session: sessions) {
-           SpecialistTime specialistTime = session.getSpecialistTime();
 
-           emailSender.sendCustomerSessionNotification(session.getCustomer().getEmail(),
-                   session.getCustomer().getFirstName() + " " + session.getCustomer().getLastName(),
-                   session.getSpecialistTime().getStartDate(),
-                   session.getSpecialist().getFirstName() + " " + session.getSpecialist().getLastName());
+           try {
+
+               if (!session.isNotified()) {
+                   emailSender.sendCustomerSessionNotification(session.getCustomer().getEmail(),
+                           session.getCustomer().getFirstName() + " " + session.getCustomer().getLastName(),
+                           session.getSpecialistTime().getStartDate(),
+                           session.getSpecialist().getFirstName() + " " + session.getSpecialist().getLastName());
+
+                   emailSender.sendSpecialistSessionNotification(session.getSpecialist().getEmail(),
+                           session.getSpecialist().getFirstName() + " " + session.getSpecialist().getLastName(),
+                           session.getSpecialistTime().getStartDate(),
+                           session.getCustomer().getFirstName() + " " + session.getCustomer().getLastName()
+                   );
+
+                   session.setNotified(true);
+
+                   sessionRepository.save(session);
+               }
+
+
+
+           } catch (Exception e) {
+               log.error("Error while sending email", e);
+           }
        }
 
        log.info("Job ** {} ** completed.  Next job scheduled @ {}", context.getJobDetail().getKey().getName(), context.getNextFireTime());

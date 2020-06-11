@@ -117,7 +117,12 @@ public class FrontendCustomerRegisterController {
 
             customerService.save(customer);
 
-            emailSender.sendCustomerRegistration(customerRegister.getEmail(), customerRegister.getFirstName() + " " + customerRegister.getLastName(), generatedPassword);
+            try {
+                emailSender.sendCustomerRegistration(customerRegister.getEmail(), customerRegister.getFirstName() + " " + customerRegister.getLastName(), generatedPassword);
+            } catch (Exception e) {
+                log.error("Error while sending email", e);
+            }
+
 
             return new CustomerRegisterResponse(ResultCodes.OK_RESPONSE);
 
@@ -215,9 +220,13 @@ public class FrontendCustomerRegisterController {
 
             Specialist save = specialistService.save(specialist);
 
-            emailSender.sendSpecialistRegistration(customerRegister.getEmail(), customerRegister.getFirstName() + " " + customerRegister.getLastName() );
+            try {
+                emailSender.sendSpecialistRegistration(customerRegister.getEmail(), customerRegister.getFirstName() + " " + customerRegister.getLastName() );
+                emailSender.sendSpecialistRegistrationToAdmin(customerRegister.getEmail(), customerRegister.getFirstName() + " " + customerRegister.getLastName(), specialisations);
+            } catch (Exception e) {
+                log.error("Error while sending email", e);
+            }
 
-            emailSender.sendSpecialistRegistrationToAdmin(customerRegister.getEmail(), customerRegister.getFirstName() + " " + customerRegister.getLastName(), specialisations);
 
             return new SpecialistRegisterResponse(ResultCodes.OK_RESPONSE);
 

@@ -31,5 +31,8 @@ public class SessionPayout {
     @Column
     private String payoutCurrency;
 
+    @Column
+    private String orderID;
+
 }
 

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>Напоминание о консультации</title>
+</head>
+<body>
+<p>Уважаемый</p>
+<p th:text="${name}"></p>
+<p>. Напоминаем, что ваш сеанс консультации состоится сегодня :</p>
+<p th:text="${date}"></p>
+<p> Клиент :</p>
+<p th:text="${customerName}"></p>
+</body>
+<html>

@@ -49,5 +49,17 @@ public class Session {
     @Column
     private String orderID;
 
+    @Column
+    private boolean notified = false;
+
+    @Column
+    private boolean customerConfirmed = false;
+
+    @Column(length = 10000)
+    private String comment;
+
+    @Column
+    private long rating;
+
 }
 

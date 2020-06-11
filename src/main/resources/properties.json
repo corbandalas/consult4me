@@ -33,5 +33,11 @@
     "key": "studio.secretingredients.liqpay.sandbox",
     "value": "true",
     "description": "Indicate whether using Liqpay sandbox mode"
+  },
+
+  {
+    "key": "studio.secretingredients.url.session.notification.confirm",
+    "value": "http://consultme.com.ua:8080/",
+    "description": "Base URL for customer to confirm success session"
   }
 ]

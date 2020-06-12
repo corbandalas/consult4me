@@ -16,6 +16,7 @@ import studio.secretingredients.consult4me.authorization.specialist.SpecialistTo
 import studio.secretingredients.consult4me.controller.ResultCodes;
 import studio.secretingredients.consult4me.controller.admin.customer.dto.AdminSpecialistFindTimeResponse;
 import studio.secretingredients.consult4me.controller.admin.customer.dto.AdminSpecialistTimeResponse;
+import studio.secretingredients.consult4me.controller.admin.session.dto.SessionListResponse;
 import studio.secretingredients.consult4me.controller.frontend.profile.dto.*;
 import studio.secretingredients.consult4me.controller.frontend.register.dto.SpecialistSpecialisation;
 import studio.secretingredients.consult4me.domain.*;
@@ -263,6 +264,52 @@ public class FrontendProfileController {
 
 
         return new FrontendSpecialistTimeListResponse(ResultCodes.OK_RESPONSE, specialistTime);
+    }
+
+
+    @PostMapping(
+            value = "/frontend/customer/sessions", consumes = "application/json", produces = "application/json")
+    @CustomerAuthorized
+    public SessionListResponse sessionListByCustomer(@RequestBody SessionByCustomerList request) {
+
+        try {
+
+            Customer customer = cacheProvider.getCustomerToken(request.getToken()).getCustomer();
+
+            return new SessionListResponse(ResultCodes.OK_RESPONSE, sessionService.findByCustomer(customer));
+
+        } catch (Exception e) {
+            log.error("Exception", e);
+        }
+
+        return new SessionListResponse(ResultCodes.GENERAL_ERROR, null);
+    }
+
+    @PostMapping(
+            value = "/frontend/customer/confirmSession", consumes = "application/json", produces = "application/json")
+    @CustomerAuthorized
+    public SessionConfirmResponse sessionConfirm(@RequestBody SessionConfirm request) {
+
+        try {
+
+            Optional<Session> session = sessionService.findByID(request.getSessionID());
+
+            if (!session.isPresent()) {
+                return new SessionConfirmResponse(ResultCodes.WRONG_SESSION, null);
+            }
+
+            if (session.get().getSessionState().equals(SessionState.PAYED) && !session.get().isCustomerConfirmed()) {
+                Session session1 = session.get();
+                session1.setCustomerConfirmed(true);
+                Session save = sessionService.save(session1);
+                return new SessionConfirmResponse(ResultCodes.OK_RESPONSE, save);
+            }
+
+        } catch (Exception e) {
+            log.error("Exception", e);
+        }
+
+        return new SessionConfirmResponse(ResultCodes.GENERAL_ERROR, null);
     }
 
     @PostMapping(

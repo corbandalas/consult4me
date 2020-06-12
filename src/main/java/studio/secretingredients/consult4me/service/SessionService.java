@@ -7,6 +7,7 @@ import studio.secretingredients.consult4me.repository.SessionRepository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Session service
@@ -36,6 +37,10 @@ public class SessionService {
 
     public List<Session> findBySpecialistTimeStartDateBetween(Date startDate, Date endDate, SessionState sessionState) {
         return sessionRepository.findBySpecialistTimeStartDateBetweenAndSessionState(startDate, endDate, sessionState);
+    }
+
+    public Optional<Session> findByID(long id) {
+        return sessionRepository.findById(id);
     }
 
 }

@@ -9,6 +9,7 @@ package studio.secretingredients.consult4me.domain;
 public enum AdminRole {
 
     ROLE_ADMIN_PROPERTY_LIST("Allows to view property list"),
+    ROLE_ADMIN_PROPERTY_UPDATE("Allows to view property update"),
     ROLE_ADMIN_ACCOUNT_LIST("Allows to view account list"),
     ROLE_ADMIN_ACCOUNT_CREATE("Allows to create account"),
     ROLE_ADMIN_ACCOUNT_UPDATE("Allows to update account"),
@@ -25,6 +26,7 @@ public enum AdminRole {
     ROLE_ADMIN_EDIT_SPECIALIST("Allows to edit specialist"),
     ROLE_ADMIN_EDIT_CATEGORIES("Allows to edit categories"),
     ROLE_ADMIN_VIEW_SESSIONS("Allows to view customer/specialist sessions"),
+    ROLE_ADMIN_PERFORM_PAYOUT("Allows to perform session payout"),
 
     ;
 

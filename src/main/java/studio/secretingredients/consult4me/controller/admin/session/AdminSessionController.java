@@ -11,14 +11,12 @@ import studio.secretingredients.consult4me.CacheProvider;
 import studio.secretingredients.consult4me.authorization.admin.AdminUserAuthorized;
 import studio.secretingredients.consult4me.controller.ResultCodes;
 import studio.secretingredients.consult4me.controller.admin.customer.dto.*;
-import studio.secretingredients.consult4me.controller.admin.session.dto.SessionByCustomerList;
-import studio.secretingredients.consult4me.controller.admin.session.dto.SessionBySpecialistList;
-import studio.secretingredients.consult4me.controller.admin.session.dto.SessionByStateList;
-import studio.secretingredients.consult4me.controller.admin.session.dto.SessionListResponse;
+import studio.secretingredients.consult4me.controller.admin.session.dto.*;
 import studio.secretingredients.consult4me.controller.frontend.profile.dto.SpecialistGetResponse;
 import studio.secretingredients.consult4me.controller.frontend.register.dto.SpecialistRegisterResponse;
 import studio.secretingredients.consult4me.controller.frontend.register.dto.SpecialistSpecialisation;
 import studio.secretingredients.consult4me.domain.*;
+import studio.secretingredients.consult4me.domain.SessionPayout;
 import studio.secretingredients.consult4me.service.*;
 import studio.secretingredients.consult4me.util.SecurityUtil;
 
@@ -48,6 +46,9 @@ public class AdminSessionController {
 
     @Autowired
     SessionService sessionService;
+
+    @Autowired
+    SessionPayoutService sessionPayoutService;
 
 
     @PostMapping(
@@ -140,6 +141,46 @@ public class AdminSessionController {
         }
 
         return new SessionListResponse(ResultCodes.GENERAL_ERROR, null);
+    }
+
+    @PostMapping(
+            value = "/admin/session/performpayout", consumes = "application/json", produces = "application/json")
+    @AdminUserAuthorized(requiredRoles = {
+            AdminRole.ROLE_ADMIN_PERFORM_PAYOUT
+    })
+    public SessionPayoutResponse sessionPayout(@RequestBody SessionPayout request) {
+
+        try {
+
+            if (request == null
+                    ) {
+                return new SessionPayoutResponse(ResultCodes.WRONG_REQUEST, null);
+            }
+
+            Optional<Session> session = sessionService.findByID(request.getId());
+
+            if (!session.isPresent()) {
+                return new SessionPayoutResponse(ResultCodes.WRONG_SESSION, null);
+            }
+
+            if (!session.get().getSessionState().equals(SessionState.PAYED)) {
+                return new SessionPayoutResponse(ResultCodes.WRONG_SESSION, null);
+            }
+
+            SessionPayout sessionPayout = sessionPayoutService.performPayout(session.get());
+
+            if (sessionPayout == null) {
+                return new SessionPayoutResponse(ResultCodes.PAYOUT_ERROR, null);
+            }
+
+            return new SessionPayoutResponse(ResultCodes.OK_RESPONSE, sessionPayout);
+
+
+        } catch (Exception e) {
+            log.error("Exception", e);
+        }
+
+        return new SessionPayoutResponse(ResultCodes.GENERAL_ERROR, null);
     }
 
 

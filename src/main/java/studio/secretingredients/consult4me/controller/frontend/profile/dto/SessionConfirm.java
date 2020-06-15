@@ -6,4 +6,8 @@ import studio.secretingredients.consult4me.controller.BaseTokenRequest;
 @Data
 public class SessionConfirm extends BaseTokenRequest {
     private long sessionID;
+
+    private String comment;
+
+    private long rating;
 }

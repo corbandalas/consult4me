@@ -301,6 +301,14 @@ public class FrontendProfileController {
             if (session.get().getSessionState().equals(SessionState.PAYED) && !session.get().isCustomerConfirmed()) {
                 Session session1 = session.get();
                 session1.setCustomerConfirmed(true);
+                if (StringUtils.isNotBlank(request.getComment())) {
+                    session1.setComment(request.getComment());
+                }
+
+                if (request.getRating() > 0) {
+                    session1.setRating(request.getRating());
+                }
+
                 Session save = sessionService.save(session1);
                 return new SessionConfirmResponse(ResultCodes.OK_RESPONSE, save);
             }

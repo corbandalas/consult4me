@@ -27,6 +27,7 @@ public enum AdminRole {
     ROLE_ADMIN_EDIT_CATEGORIES("Allows to edit categories"),
     ROLE_ADMIN_VIEW_SESSIONS("Allows to view customer/specialist sessions"),
     ROLE_ADMIN_PERFORM_PAYOUT("Allows to perform session payout"),
+    ROLE_ADMIN_VIEW_PAYOUT("Allows to view session payout"),
 
     ;
 

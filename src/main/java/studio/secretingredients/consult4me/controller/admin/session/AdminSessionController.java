@@ -17,6 +17,7 @@ import studio.secretingredients.consult4me.controller.frontend.register.dto.Spec
 import studio.secretingredients.consult4me.controller.frontend.register.dto.SpecialistSpecialisation;
 import studio.secretingredients.consult4me.domain.*;
 import studio.secretingredients.consult4me.domain.SessionPayout;
+import studio.secretingredients.consult4me.repository.SessionRepository;
 import studio.secretingredients.consult4me.service.*;
 import studio.secretingredients.consult4me.util.SecurityUtil;
 
@@ -49,6 +50,7 @@ public class AdminSessionController {
 
     @Autowired
     SessionPayoutService sessionPayoutService;
+
 
 
     @PostMapping(
@@ -148,7 +150,7 @@ public class AdminSessionController {
     @AdminUserAuthorized(requiredRoles = {
             AdminRole.ROLE_ADMIN_PERFORM_PAYOUT
     })
-    public SessionPayoutResponse sessionPayout(@RequestBody SessionPayout request) {
+    public SessionPayoutResponse sessionPayout(@RequestBody SessionPayoutRequest request) {
 
         try {
 
@@ -157,7 +159,7 @@ public class AdminSessionController {
                 return new SessionPayoutResponse(ResultCodes.WRONG_REQUEST, null);
             }
 
-            Optional<Session> session = sessionService.findByID(request.getId());
+            Optional<Session> session = sessionService.findByID(request.getSessionID());
 
             if (!session.isPresent()) {
                 return new SessionPayoutResponse(ResultCodes.WRONG_SESSION, null);
@@ -181,6 +183,83 @@ public class AdminSessionController {
         }
 
         return new SessionPayoutResponse(ResultCodes.GENERAL_ERROR, null);
+    }
+
+    @PostMapping(
+            value = "/admin/payout/viewBySession", consumes = "application/json", produces = "application/json")
+    @AdminUserAuthorized(requiredRoles = {
+            AdminRole.ROLE_ADMIN_VIEW_PAYOUT
+    })
+    public SessionPayoutResponse payoutBySession(@RequestBody SessionPayoutRequest request) {
+
+        try {
+
+            if (request == null
+            ) {
+                return new SessionPayoutResponse(ResultCodes.WRONG_REQUEST, null);
+            }
+
+            Optional<Session> session = sessionService.findByID(request.getSessionID());
+
+            if (!session.isPresent()) {
+                return new SessionPayoutResponse(ResultCodes.WRONG_SESSION, null);
+            }
+
+            SessionPayout sessionPayout = sessionPayoutService.findBySession(session.get());
+
+            if (sessionPayout == null) {
+                return new SessionPayoutResponse(ResultCodes.PAYOUT_ERROR, null);
+            }
+
+            return new SessionPayoutResponse(ResultCodes.OK_RESPONSE, sessionPayout);
+
+
+        } catch (Exception e) {
+            log.error("Exception", e);
+        }
+
+        return new SessionPayoutResponse(ResultCodes.GENERAL_ERROR, null);
+    }
+
+
+    @PostMapping(
+            value = "/admin/payout/viewBySpecialistAndDate", consumes = "application/json", produces = "application/json")
+    @AdminUserAuthorized(requiredRoles = {
+            AdminRole.ROLE_ADMIN_VIEW_PAYOUT
+    })
+    public SessionPayoutListResponse payoutBySpecialist(@RequestBody SessionPayoutBySpecialistRequest request) {
+
+        try {
+
+            if (request == null
+            ) {
+                return new SessionPayoutListResponse(ResultCodes.WRONG_REQUEST, null);
+            }
+
+            Optional<Specialist> specialistByEmail = specialistService.findSpecialistByEmail(request.getSpecialistEmail());
+
+            if (specialistByEmail.isPresent() && request.getStartDate() != null && request.getEndDate() != null) {
+                return new SessionPayoutListResponse(ResultCodes.OK_RESPONSE,
+                        sessionPayoutService.findBySessionSpecialistAndDateBetween(specialistByEmail.get(), request.getStartDate(),
+                                request.getEndDate()));
+            } else if (specialistByEmail.isPresent() && (request.getStartDate() == null && request.getEndDate() == null)) {
+                return new SessionPayoutListResponse(ResultCodes.OK_RESPONSE,
+                        sessionPayoutService.findBySessionSpecialist(specialistByEmail.get()));
+            } else if (!specialistByEmail.isPresent() && request.getStartDate() != null && request.getEndDate() != null) {
+                return new SessionPayoutListResponse(ResultCodes.OK_RESPONSE,
+                        sessionPayoutService.findByDateBetween(request.getStartDate(),
+                                request.getEndDate()));
+            } else {
+                return new SessionPayoutListResponse(ResultCodes.OK_RESPONSE,
+                        sessionPayoutService.findAll());
+            }
+
+
+        } catch (Exception e) {
+            log.error("Exception", e);
+        }
+
+        return new SessionPayoutListResponse(ResultCodes.GENERAL_ERROR, null);
     }
 
 

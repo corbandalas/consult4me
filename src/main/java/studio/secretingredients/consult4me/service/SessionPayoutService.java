@@ -4,16 +4,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import studio.secretingredients.consult4me.domain.Customer;
-import studio.secretingredients.consult4me.domain.Session;
-import studio.secretingredients.consult4me.domain.SessionPayout;
-import studio.secretingredients.consult4me.domain.SessionState;
+import studio.secretingredients.consult4me.domain.*;
 import studio.secretingredients.consult4me.integration.api.liqpay.LiqPay;
 import studio.secretingredients.consult4me.repository.SessionPayoutRepository;
 import studio.secretingredients.consult4me.repository.SessionRepository;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,6 +35,26 @@ public class SessionPayoutService {
 
     public SessionPayout save(SessionPayout sessionPayout) {
         return sessionPayoutRepository.save(sessionPayout);
+    }
+
+
+    public SessionPayout findBySession(Session session) {
+        return sessionPayoutRepository.findBySession(session);
+    }
+
+    public List<SessionPayout> findBySessionSpecialist(Specialist specialist) {
+        return sessionPayoutRepository.findBySessionSpecialist(specialist);
+    }
+    public List<SessionPayout> findByDateBetween(Date startDate, Date endDate) {
+        return sessionPayoutRepository.findByDateBetween(startDate, endDate);
+    }
+
+    public List<SessionPayout> findBySessionSpecialistAndDateBetween(Specialist specialist, Date startDate, Date endDate) {
+        return sessionPayoutRepository.findBySessionSpecialistAndDateBetween(specialist, startDate, endDate);
+    }
+
+    public List<SessionPayout> findAll() {
+        return (List<SessionPayout>)sessionPayoutRepository.findAll();
     }
 
     public SessionPayout performPayout(Session session) {

@@ -25,7 +25,6 @@ public class Specialisation {
     @Enumerated(EnumType.STRING)
     private SpecialisationType specialisationType;
 
-    @JsonIgnore
     @ManyToMany(
             mappedBy = "specialisations")
     private List<Specialist> specialists;

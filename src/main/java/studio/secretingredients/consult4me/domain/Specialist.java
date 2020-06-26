@@ -74,6 +74,7 @@ public class Specialist {
     @Column
     private String pan;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "specialist_specialisation",

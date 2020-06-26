@@ -331,13 +331,13 @@ public class FrontendProfileController {
                 || StringUtils.isBlank(request.getSuccessURL())
                 || request.getSpecialistTimeID() <= 0
                 ) {
-            return new FrontendSpecialistInitSessionResponse(ResultCodes.WRONG_REQUEST, null, null);
+            return new FrontendSpecialistInitSessionResponse(ResultCodes.WRONG_REQUEST,  null);
         }
 
         SpecialistTime specialistTime = specialistTimeService.findById(request.getSpecialistTimeID());
 
         if (!specialistTime.isFree()) {
-            return new FrontendSpecialistInitSessionResponse(ResultCodes.SPECIALIST_TIME_RESERVED, null, null);
+            return new FrontendSpecialistInitSessionResponse(ResultCodes.SPECIALIST_TIME_RESERVED,  null);
         }
 
         Specialist specialist = specialistService.findSpecialistByEmail(request.getSpecialistEmail()).get();
@@ -388,7 +388,7 @@ public class FrontendProfileController {
 
         String html = liqpay.cnb_form(params);
 
-        return new FrontendSpecialistInitSessionResponse(ResultCodes.OK_RESPONSE, save, html);
+        return new FrontendSpecialistInitSessionResponse(ResultCodes.OK_RESPONSE, html);
     }
 
     @PostMapping(

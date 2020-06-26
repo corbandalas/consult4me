@@ -266,6 +266,45 @@ public class FrontendProfileController {
         return new FrontendSpecialistTimeListResponse(ResultCodes.OK_RESPONSE, specialistTime);
     }
 
+    @PostMapping(
+            value = "/frontend/getSpecialistTime", consumes = "application/json", produces = "application/json")
+    @ApiImplicitParams(value = {
+            @ApiImplicitParam(value = "SHA256(accountID+privateKey)"
+                    , name = "checksum")})
+    public AdminSpecialistFindTimeResponse findSpecialistTime(@RequestBody FrontendFindTime request) {
+
+        if (request == null || StringUtils.isBlank(request.getAccountID())
+                || StringUtils.isBlank(request.getCheckSum())
+        ) {
+            return new AdminSpecialistFindTimeResponse(ResultCodes.WRONG_REQUEST, null);
+        }
+
+        Account account = accountService.findAccountByID(Integer.parseInt(request.getAccountID()));
+
+        if (account == null || !account.isActive()) {
+            return new AdminSpecialistFindTimeResponse(ResultCodes.WRONG_ACCOUNT, null);
+        }
+
+
+        if (!SecurityUtil.generateKeyFromArray(request.getAccountID(),
+                account.getPrivateKey()).equalsIgnoreCase(request.getCheckSum())) {
+            return new AdminSpecialistFindTimeResponse(ResultCodes.WRONG_CHECKSUM, null);
+        }
+
+        Optional<Specialist> specialistByEmail = specialistService.findSpecialistByEmail(request.getSpecialistEmail());
+
+        List<SpecialistTime> specialistTime = null;
+
+        if (request.getStartSearchPeriod() != null && request.getEndSearchPeriod() != null ) {
+            specialistTime = specialistTimeService.findStartDateAfterStartAndEndDateBeforeEndBySpecialist(request.getStartSearchPeriod(),
+                    request.getEndSearchPeriod(), specialistByEmail.get());
+        } else {
+            specialistTime = specialistTimeService.findSpecialistTime(specialistByEmail.get());
+        }
+
+        return new AdminSpecialistFindTimeResponse(ResultCodes.OK_RESPONSE, specialistTime);
+    }
+
 
     @PostMapping(
             value = "/frontend/customer/sessions", consumes = "application/json", produces = "application/json")

@@ -18,7 +18,6 @@ import java.util.Set;
  */
 @Data
 @Entity(name = "specialist")
-public class Specialist {
 
     @Id
     private String email;
@@ -74,7 +73,6 @@ public class Specialist {
     @Column
     private String pan;
 
-    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "specialist_specialisation",

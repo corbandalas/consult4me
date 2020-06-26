@@ -18,6 +18,7 @@ import java.util.Set;
  */
 @Data
 @Entity(name = "specialist")
+public class Specialist {
 
     @Id
     private String email;

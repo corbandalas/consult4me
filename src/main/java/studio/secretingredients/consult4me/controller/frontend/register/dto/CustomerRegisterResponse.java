@@ -16,4 +16,6 @@ public class CustomerRegisterResponse {
 
     private String result;
 
+    private String token;
+
 }

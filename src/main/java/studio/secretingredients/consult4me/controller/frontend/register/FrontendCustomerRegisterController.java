@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import studio.secretingredients.consult4me.CacheProvider;
+import studio.secretingredients.consult4me.authorization.customer.CustomerToken;
 import studio.secretingredients.consult4me.controller.ResultCodes;
 import studio.secretingredients.consult4me.controller.frontend.register.dto.*;
 import studio.secretingredients.consult4me.domain.*;
@@ -40,6 +42,9 @@ public class FrontendCustomerRegisterController {
     @Autowired
     EmailSender emailSender;
 
+    @Autowired
+    CacheProvider cacheProvider;
+
     @PostMapping(
             value = "/frontend/customer/register", consumes = "application/json", produces = "application/json")
     @ApiImplicitParams(value = {
@@ -57,25 +62,25 @@ public class FrontendCustomerRegisterController {
                     || StringUtils.isBlank(customerRegister.getLastName())
                     || StringUtils.isBlank(customerRegister.getPhone())
             ) {
-                return new CustomerRegisterResponse(ResultCodes.WRONG_REQUEST);
+                return new CustomerRegisterResponse(ResultCodes.WRONG_REQUEST, null);
             }
 
             Account account = accountService.findAccountByID(Integer.parseInt(customerRegister.getAccountID()));
 
             if (account == null || !account.isActive()) {
-                return new CustomerRegisterResponse(ResultCodes.WRONG_ACCOUNT);
+                return new CustomerRegisterResponse(ResultCodes.WRONG_ACCOUNT, null);
             }
 
             Optional<Customer> customerByEmail = customerService.findCustomerByEmail(customerRegister.getEmail());
 
 
             if (customerByEmail.isPresent()) {
-                return new CustomerRegisterResponse(ResultCodes.ALREADY_REGISTERED);
+                return new CustomerRegisterResponse(ResultCodes.ALREADY_REGISTERED, null);
             }
 
             if (!SecurityUtil.generateKeyFromArray(customerRegister.getAccountID(), customerRegister.getEmail(), /*customerRegister.getHashedPassword(),*/ customerRegister.getPhone(),
                     account.getPrivateKey()).equalsIgnoreCase(customerRegister.getCheckSum())) {
-                return new CustomerRegisterResponse(ResultCodes.WRONG_CHECKSUM);
+                return new CustomerRegisterResponse(ResultCodes.WRONG_CHECKSUM, null);
             }
 
             Customer customer = new Customer();
@@ -123,12 +128,17 @@ public class FrontendCustomerRegisterController {
                 log.error("Error while sending email", e);
             }
 
+            String token = RandomStringUtils.randomAlphanumeric(20);
 
-            return new CustomerRegisterResponse(ResultCodes.OK_RESPONSE);
+            CustomerToken customerToken = new CustomerToken(token, customer, new Date(), account);
+
+            cacheProvider.putCustomerToken(token, customerToken);
+
+            return new CustomerRegisterResponse(ResultCodes.OK_RESPONSE, token);
 
         } catch (Exception e) {
             log.error("Error", e);
-            return new CustomerRegisterResponse(ResultCodes.GENERAL_ERROR);
+            return new CustomerRegisterResponse(ResultCodes.GENERAL_ERROR, null);
         }
     }
 

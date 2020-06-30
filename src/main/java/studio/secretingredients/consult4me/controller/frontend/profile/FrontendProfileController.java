@@ -379,7 +379,13 @@ public class FrontendProfileController {
             return new FrontendSpecialistInitSessionResponse(ResultCodes.SPECIALIST_TIME_RESERVED,  null);
         }
 
-        Specialist specialist = specialistService.findSpecialistByEmail(request.getSpecialistEmail()).get();
+        Optional<Specialist> specialistByEmail = specialistService.findSpecialistByEmail(request.getSpecialistEmail());
+
+        if (!specialistByEmail.isPresent()) {
+            return new FrontendSpecialistInitSessionResponse(ResultCodes.WRONG_SPECIALIST,  null);
+        }
+
+        Specialist specialist = specialistByEmail.get();
 
 
         Session session = new Session();

@@ -309,13 +309,31 @@ public class FrontendProfileController {
     @PostMapping(
             value = "/frontend/customer/sessions", consumes = "application/json", produces = "application/json")
     @CustomerAuthorized
-    public SessionListResponse sessionListByCustomer(@RequestBody SessionByCustomerList request) {
+    public SessionListResponse sessionListByCustomer(@RequestBody ProfileSessionByCustomerList request) {
 
         try {
 
             Customer customer = cacheProvider.getCustomerToken(request.getToken()).getCustomer();
 
             return new SessionListResponse(ResultCodes.OK_RESPONSE, sessionService.findByCustomer(customer));
+
+        } catch (Exception e) {
+            log.error("Exception", e);
+        }
+
+        return new SessionListResponse(ResultCodes.GENERAL_ERROR, null);
+    }
+
+    @PostMapping(
+            value = "/frontend/specialist/sessions", consumes = "application/json", produces = "application/json")
+    @SpecialistAuthorized
+    public SessionListResponse sessionListBySpecialist(@RequestBody ProfileSessionBySpecialistList request) {
+
+        try {
+
+            Specialist customer = cacheProvider.getSpecialistToken(request.getToken()).getSpecialist();
+
+            return new SessionListResponse(ResultCodes.OK_RESPONSE, sessionService.findBySpecialist(customer));
 
         } catch (Exception e) {
             log.error("Exception", e);

@@ -4,5 +4,5 @@ import lombok.Data;
 import studio.secretingredients.consult4me.controller.BaseTokenRequest;
 
 @Data
-public class SessionByCustomerList extends BaseTokenRequest {
+public class ProfileSessionByCustomerList extends BaseTokenRequest {
 }

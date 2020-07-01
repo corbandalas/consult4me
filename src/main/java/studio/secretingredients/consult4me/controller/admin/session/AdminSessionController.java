@@ -1,7 +1,6 @@
 package studio.secretingredients.consult4me.controller.admin.session;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,18 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 import studio.secretingredients.consult4me.CacheProvider;
 import studio.secretingredients.consult4me.authorization.admin.AdminUserAuthorized;
 import studio.secretingredients.consult4me.controller.ResultCodes;
-import studio.secretingredients.consult4me.controller.admin.customer.dto.*;
 import studio.secretingredients.consult4me.controller.admin.session.dto.*;
-import studio.secretingredients.consult4me.controller.frontend.profile.dto.SpecialistGetResponse;
-import studio.secretingredients.consult4me.controller.frontend.register.dto.SpecialistRegisterResponse;
-import studio.secretingredients.consult4me.controller.frontend.register.dto.SpecialistSpecialisation;
-import studio.secretingredients.consult4me.domain.*;
 import studio.secretingredients.consult4me.domain.SessionPayout;
-import studio.secretingredients.consult4me.repository.SessionRepository;
+import studio.secretingredients.consult4me.domain.*;
 import studio.secretingredients.consult4me.service.*;
-import studio.secretingredients.consult4me.util.SecurityUtil;
 
-import java.util.*;
+import java.util.Optional;
 
 @RestController
 @Slf4j

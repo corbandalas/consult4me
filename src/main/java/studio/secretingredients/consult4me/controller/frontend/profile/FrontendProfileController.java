@@ -7,6 +7,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import studio.secretingredients.consult4me.CacheProvider;
 import studio.secretingredients.consult4me.authorization.customer.CustomerAuthorized;
@@ -455,9 +456,12 @@ public class FrontendProfileController {
     }
 
     @PostMapping(
-            value = "/frontend/customer/liqpay/callback", consumes = "application/json", produces = "application/json")
-    public FrontendSpecialistInitSessionResponse callback(@RequestBody FrontendLiqpayCallback request) {
+            value = "/frontend/customer/liqpay/callback")
+    public FrontendSpecialistInitSessionResponse callback(@RequestParam Map<String, String> body) {
 
+        log.info("Liqpay callback data: ");
+
+        printMap(body);
 
         String publicKey = propertyService.findPropertyByKey("studio.secretingredients.liqpay.public.key").getValue();
 
@@ -469,18 +473,26 @@ public class FrontendProfileController {
 
         String sign = liqpay.str_to_sign(
                 privateKey +
-                        request.getData() +
+                        body.get("data") +
                         privateKey);
 
-        if (!sign.equalsIgnoreCase(request.getSignature())) {
+        if (!sign.equalsIgnoreCase(body.get("signature"))) {
             log.error("LiqPay callback error. Signature mismastch" );
             return null;
         }
 
 
-        log.info("Liqpay decoded response: " + SecurityUtil.decodeString(request.getData()));
+        log.info("Liqpay decoded response: " + SecurityUtil.decodeString(body.get("data")));
 
         return null;
+    }
+
+    private void printMap(Map mp) {
+        Iterator it = mp.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pair = (Map.Entry)it.next();
+            log.info(pair.getKey() + " = " + pair.getValue());
+        }
     }
 
 }

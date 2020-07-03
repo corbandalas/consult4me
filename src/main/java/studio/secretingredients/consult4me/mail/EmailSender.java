@@ -60,7 +60,7 @@ public class EmailSender {
         data.put("specialistName", specialistName);
         data.put("url", url);
 
-        initiateEmailSend(toEmail, "Подтверждение статусаконсультации", "customerConfirmSessionNotification", data);
+        initiateEmailSend(toEmail, "Подтверждение статуса консультации", "customerConfirmSessionNotification", data);
     }
 
     public void sendSpecialistSessionNotification(String toEmail, String customerName, Date sessionDate, String specialistName) {

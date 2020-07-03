@@ -1,5 +1,7 @@
 package studio.secretingredients.consult4me.controller.frontend.profile;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,7 @@ import studio.secretingredients.consult4me.controller.frontend.profile.dto.*;
 import studio.secretingredients.consult4me.controller.frontend.register.dto.SpecialistSpecialisation;
 import studio.secretingredients.consult4me.domain.*;
 import studio.secretingredients.consult4me.integration.api.liqpay.LiqPay;
+import studio.secretingredients.consult4me.integration.api.liqpay.LiqpayCallbackResponse;
 import studio.secretingredients.consult4me.service.*;
 import studio.secretingredients.consult4me.util.SecurityUtil;
 
@@ -481,8 +484,48 @@ public class FrontendProfileController {
             return null;
         }
 
+        String data = SecurityUtil.decodeString(body.get("data"));
 
-        log.info("Liqpay decoded response: " + SecurityUtil.decodeString(body.get("data")));
+
+        log.info("Liqpay decoded response: " + data);
+
+        final GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.disableHtmlEscaping();
+        final Gson gson = gsonBuilder.create();
+
+        LiqpayCallbackResponse liqpayCallbackResponse = gson.fromJson(data, LiqpayCallbackResponse.class);
+
+        if (liqpayCallbackResponse != null) {
+
+            Session session = cacheProvider.getSession("liqpay" + liqpayCallbackResponse.getOrderId());
+
+            if (session == null) {
+                log.error("Session was not found for order #" + liqpayCallbackResponse.getOrderId());
+                return null;
+            }
+
+            Optional<Session> reloadFromDB = sessionService.findByID(session.getId());
+
+            if (!reloadFromDB.isPresent()) {
+                log.error("Session # "  + session.getId() + " was not fresh reloaded from db" );
+                return null;
+            }
+
+            Session reloadedSession = reloadFromDB.get();
+
+            if (  reloadedSession.getSessionState().equals(SessionState.ORDERED)) {
+
+                if ((liqpayCallbackResponse.getStatus().equalsIgnoreCase("success")
+                        || liqpayCallbackResponse.getStatus().equalsIgnoreCase("sandbox"))) {
+                    reloadedSession.setSessionState(SessionState.PAYED);
+                } else {
+                    reloadedSession.setSessionState(SessionState.CANCELED);
+                }
+
+                sessionService.save(reloadedSession);
+            }
+        }
+
 
         return null;
     }

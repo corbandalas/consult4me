@@ -104,10 +104,10 @@ public class LiqpayCallbackResponse {
     private String language;
     @SerializedName("create_date")
     @Expose
-    private Integer createDate;
+    private Long createDate;
     @SerializedName("end_date")
     @Expose
-    private Integer endDate;
+    private Long endDate;
     @SerializedName("transaction_id")
     @Expose
     private Integer transactionId;
@@ -368,19 +368,19 @@ public class LiqpayCallbackResponse {
         this.language = language;
     }
 
-    public Integer getCreateDate() {
+    public Long getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Integer createDate) {
+    public void setCreateDate(Long createDate) {
         this.createDate = createDate;
     }
 
-    public Integer getEndDate() {
+    public Long getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Integer endDate) {
+    public void setEndDate(Long endDate) {
         this.endDate = endDate;
     }
 

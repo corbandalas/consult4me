@@ -24,5 +24,5 @@ public interface SessionRepository extends CrudRepository<Session, Long> {
     List<Session> findBySpecialist(Specialist specialist);
     List<Session> findBySessionState(SessionState sessionState);
     List<Session> findBySpecialistTimeStartDateBetweenAndSessionState(Date startDate, Date endDate, SessionState sessionState);
-    List<Session> findBySpecialistTimeEndDateAfterAndSessionState(Date endDate, SessionState sessionState);
+    List<Session> findBySpecialistTimeEndDateBeforeAndSessionState(Date endDate, SessionState sessionState);
 }

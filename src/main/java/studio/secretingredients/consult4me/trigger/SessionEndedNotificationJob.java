@@ -43,7 +43,7 @@ public class SessionEndedNotificationJob implements Job {
         log.info("Job ** {} ** starting @ {}", context.getJobDetail().getKey().getName(), context.getFireTime());
 
 
-        List<Session> sessions = sessionRepository.findBySpecialistTimeEndDateAfterAndSessionState(new Date(), SessionState.PAYED);
+        List<Session> sessions = sessionRepository.findBySpecialistTimeEndDateBeforeAndSessionState(new Date(), SessionState.PAYED);
 
         for (Session session : sessions) {
 

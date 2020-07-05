@@ -81,6 +81,9 @@ public class SessionPayoutService {
 
                 LiqPay liqpay = new LiqPay(propertyService.findPropertyByKey("studio.secretingredients.liqpay.public.key").getValue(),
                         propertyService.findPropertyByKey("studio.secretingredients.liqpay.private.key").getValue());
+
+                liqpay.setCnbSandbox(Boolean.parseBoolean(propertyService.findPropertyByKey("studio.secretingredients.liqpay.sandbox").getValue()));
+
                 Map<String, Object> res = liqpay.api("request", params);
 
                 Util.printMap(res);

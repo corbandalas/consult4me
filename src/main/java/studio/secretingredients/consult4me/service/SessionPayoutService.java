@@ -84,7 +84,7 @@ public class SessionPayoutService {
 
                 String status = (String) res.get("status");
 
-                if (status.equalsIgnoreCase("success")) {
+                if (status.equalsIgnoreCase("success") || status.equalsIgnoreCase("sandbox")) {
 
                     session.setSessionState(SessionState.COMPLETED);
 

@@ -62,7 +62,7 @@ public class SessionPayoutService {
 
             try {
 
-                String orderID = StringUtils.abbreviate(session.getSpecialist().getFirstName(), 3) + System.currentTimeMillis();
+                String orderID = StringUtils.abbreviate(session.getSpecialist().getFirstName() + session.getSpecialist().getLastName(), 4) + System.currentTimeMillis();
 
 
                 long payoutAmount = session.getPrice();

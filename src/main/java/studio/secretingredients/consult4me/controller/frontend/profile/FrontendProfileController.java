@@ -27,6 +27,7 @@ import studio.secretingredients.consult4me.integration.api.liqpay.LiqPay;
 import studio.secretingredients.consult4me.integration.api.liqpay.LiqpayCallbackResponse;
 import studio.secretingredients.consult4me.service.*;
 import studio.secretingredients.consult4me.util.SecurityUtil;
+import studio.secretingredients.consult4me.util.Util;
 
 import java.util.*;
 
@@ -464,7 +465,7 @@ public class FrontendProfileController {
 
         log.info("Liqpay callback data: ");
 
-        printMap(body);
+        Util.printMap(body);
 
         String publicKey = propertyService.findPropertyByKey("studio.secretingredients.liqpay.public.key").getValue();
 
@@ -528,14 +529,6 @@ public class FrontendProfileController {
 
 
         return null;
-    }
-
-    private void printMap(Map mp) {
-        Iterator it = mp.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pair = (Map.Entry)it.next();
-            log.info(pair.getKey() + " = " + pair.getValue());
-        }
     }
 
 }

@@ -8,6 +8,7 @@ import studio.secretingredients.consult4me.domain.*;
 import studio.secretingredients.consult4me.integration.api.liqpay.LiqPay;
 import studio.secretingredients.consult4me.repository.SessionPayoutRepository;
 import studio.secretingredients.consult4me.repository.SessionRepository;
+import studio.secretingredients.consult4me.util.Util;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -82,6 +83,7 @@ public class SessionPayoutService {
                         propertyService.findPropertyByKey("studio.secretingredients.liqpay.private.key").getValue());
                 Map<String, Object> res = liqpay.api("request", params);
 
+                Util.printMap(res);
                 String status = (String) res.get("status");
 
                 if (status.equalsIgnoreCase("success") || status.equalsIgnoreCase("sandbox")) {

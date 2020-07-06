@@ -82,14 +82,16 @@ public class SessionPayoutService {
                 LiqPay liqpay = new LiqPay(propertyService.findPropertyByKey("studio.secretingredients.liqpay.public.key").getValue(),
                         propertyService.findPropertyByKey("studio.secretingredients.liqpay.private.key").getValue());
 
-                liqpay.setCnbSandbox(Boolean.parseBoolean(propertyService.findPropertyByKey("studio.secretingredients.liqpay.sandbox").getValue()));
+                boolean sandbox = Boolean.parseBoolean(propertyService.findPropertyByKey("studio.secretingredients.liqpay.sandbox").getValue());
+
+                liqpay.setCnbSandbox(sandbox);
 
                 Map<String, Object> res = liqpay.api("request", params);
 
                 Util.printMap(res);
                 String status = (String) res.get("status");
 
-                if (status.equalsIgnoreCase("success") || status.equalsIgnoreCase("sandbox")) {
+                if (status.equalsIgnoreCase("success") || !sandbox) {
 
                     session.setSessionState(SessionState.COMPLETED);
 

@@ -48,7 +48,7 @@ public class SpecialistRegister {
     @NotNull
     private String pan;
     @NotNull
-    private List<SpecialistSpecialisation> specialisations;
+    private List<Long> specialisations;
     @NotNull
     private String accountID;
     @NotNull

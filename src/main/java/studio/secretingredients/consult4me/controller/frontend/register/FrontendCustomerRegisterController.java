@@ -217,9 +217,9 @@ public class FrontendCustomerRegisterController {
             Set<Specialisation> specialisations = new HashSet<>();
 
             if (customerRegister.getSpecialisations() != null && customerRegister.getSpecialisations().size() > 0) {
-                for (SpecialistSpecialisation specialistSpecialisation: customerRegister.getSpecialisations()) {
+                for (Long specialistSpecialisation: customerRegister.getSpecialisations()) {
 
-                    Specialisation specialisation = specialisationService.findById(specialistSpecialisation.getId());
+                    Specialisation specialisation = specialisationService.findById(specialistSpecialisation);
 
                     specialisations.add(specialisation);
 

@@ -303,6 +303,21 @@ public class AdminCustomerSpecialistController {
         return new AdminSpecialistTimeResponse(ResultCodes.OK_RESPONSE, save);
     }
 
+    @PostMapping(
+            value = "/admin/specialist/deleteTime", consumes = "application/json", produces = "application/json")
+    @AdminUserAuthorized(requiredRoles = {
+            AdminRole.ROLE_ADMIN_EDIT_SPECIALIST
+    })
+    public AdminSpecialistTimeResponse deleteSpecialistTime(@RequestBody AdminSpecialistUpdateTime request) {
+
+        SpecialistTime specialistTime = specialistTimeService.findById(request.getId());
+
+        specialistTimeService.delete(specialistTime);
+
+        return new AdminSpecialistTimeResponse(ResultCodes.OK_RESPONSE, specialistTime);
+    }
+
+
 
 }
 

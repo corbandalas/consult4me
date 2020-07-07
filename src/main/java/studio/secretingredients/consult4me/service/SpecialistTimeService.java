@@ -37,4 +37,8 @@ public class SpecialistTimeService {
     public SpecialistTime findById(long id) {
         return specialistTimeRepository.findById(id).get();
     }
+
+    public void delete(SpecialistTime specialistTime) {
+        specialistTimeRepository.delete(specialistTime);
+    }
 }

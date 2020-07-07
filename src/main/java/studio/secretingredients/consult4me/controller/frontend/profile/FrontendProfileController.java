@@ -98,13 +98,13 @@ public class FrontendProfileController {
                     || StringUtils.isBlank(request.getDescriptionShort())
                     || StringUtils.isBlank(request.getEducation())
                     || StringUtils.isBlank(request.getPan())
-                    || request.getPriceHour() <  0
+                    || request.getPriceHour() < 0
                     || StringUtils.isBlank(request.getCurrency())
                     || StringUtils.isBlank(request.getSocialProfile())
                     || StringUtils.isBlank(request.getFirstName())
                     || StringUtils.isBlank(request.getLastName())
                     || StringUtils.isBlank(request.getPhone())
-                    ) {
+            ) {
                 return new SpecialistGetResponse(ResultCodes.WRONG_REQUEST, null, null);
             }
 
@@ -137,7 +137,7 @@ public class FrontendProfileController {
             Set<Specialisation> specialisations = new HashSet<>();
 
             if (request.getSpecialisations() != null && request.getSpecialisations().size() > 0) {
-                for (SpecialistSpecialisation specialistSpecialisation: request.getSpecialisations()) {
+                for (SpecialistSpecialisation specialistSpecialisation : request.getSpecialisations()) {
 
                     Specialisation specialisation = specialisationService.findById(specialistSpecialisation.getId());
 
@@ -173,7 +173,7 @@ public class FrontendProfileController {
 
             if (categoriesList == null || StringUtils.isBlank(categoriesList.getAccountID())
                     || StringUtils.isBlank(categoriesList.getCheckSum())
-                    ) {
+            ) {
                 return new CategoriesListResponse(ResultCodes.WRONG_REQUEST, null);
             }
 
@@ -228,7 +228,7 @@ public class FrontendProfileController {
 
         List<SpecialistTime> specialistTime = null;
 
-        if (request.getStartSearchPeriod() != null && request.getEndSearchPeriod() != null ) {
+        if (request.getStartSearchPeriod() != null && request.getEndSearchPeriod() != null) {
             specialistTime = specialistTimeService.findStartDateAfterStartAndEndDateBeforeEndBySpecialist(request.getStartSearchPeriod(),
                     request.getEndSearchPeriod(), specialist);
         } else {
@@ -253,6 +253,18 @@ public class FrontendProfileController {
         SpecialistTime save = specialistTimeService.save(specialistTime);
 
         return new AdminSpecialistTimeResponse(ResultCodes.OK_RESPONSE, save);
+    }
+
+    @PostMapping(
+            value = "/frontend/specialist/deleteTime", consumes = "application/json", produces = "application/json")
+    @SpecialistAuthorized
+    public AdminSpecialistTimeResponse deleteSpecialistTime(@RequestBody FrontendSpecialistUpdateTime request) {
+
+        SpecialistTime specialistTime = specialistTimeService.findById(request.getId());
+
+        specialistTimeService.delete(specialistTime);
+
+        return new AdminSpecialistTimeResponse(ResultCodes.OK_RESPONSE, specialistTime);
     }
 
     @PostMapping(
@@ -300,7 +312,7 @@ public class FrontendProfileController {
 
         List<SpecialistTime> specialistTime = null;
 
-        if (request.getStartSearchPeriod() != null && request.getEndSearchPeriod() != null ) {
+        if (request.getStartSearchPeriod() != null && request.getEndSearchPeriod() != null) {
             specialistTime = specialistTimeService.findStartDateAfterStartAndEndDateBeforeEndBySpecialist(request.getStartSearchPeriod(),
                     request.getEndSearchPeriod(), specialistByEmail.get());
         } else {
@@ -392,20 +404,20 @@ public class FrontendProfileController {
                 || StringUtils.isBlank(request.getSpecialistEmail())
                 || StringUtils.isBlank(request.getSuccessURL())
                 || request.getSpecialistTimeID() <= 0
-                ) {
-            return new FrontendSpecialistInitSessionResponse(ResultCodes.WRONG_REQUEST,  null);
+        ) {
+            return new FrontendSpecialistInitSessionResponse(ResultCodes.WRONG_REQUEST, null);
         }
 
         SpecialistTime specialistTime = specialistTimeService.findById(request.getSpecialistTimeID());
 
         if (!specialistTime.isFree()) {
-            return new FrontendSpecialistInitSessionResponse(ResultCodes.SPECIALIST_TIME_RESERVED,  null);
+            return new FrontendSpecialistInitSessionResponse(ResultCodes.SPECIALIST_TIME_RESERVED, null);
         }
 
         Optional<Specialist> specialistByEmail = specialistService.findSpecialistByEmail(request.getSpecialistEmail());
 
         if (!specialistByEmail.isPresent()) {
-            return new FrontendSpecialistInitSessionResponse(ResultCodes.WRONG_SPECIALIST,  null);
+            return new FrontendSpecialistInitSessionResponse(ResultCodes.WRONG_SPECIALIST, null);
         }
 
         Specialist specialist = specialistByEmail.get();
@@ -481,7 +493,7 @@ public class FrontendProfileController {
                         privateKey);
 
         if (!sign.equalsIgnoreCase(body.get("signature"))) {
-            log.error("LiqPay callback error. Signature mismastch" );
+            log.error("LiqPay callback error. Signature mismastch");
             return null;
         }
 
@@ -508,13 +520,13 @@ public class FrontendProfileController {
             Optional<Session> reloadFromDB = sessionService.findByID(session.getId());
 
             if (!reloadFromDB.isPresent()) {
-                log.error("Session # "  + session.getId() + " was not fresh reloaded from db" );
+                log.error("Session # " + session.getId() + " was not fresh reloaded from db");
                 return null;
             }
 
             Session reloadedSession = reloadFromDB.get();
 
-            if (  reloadedSession.getSessionState().equals(SessionState.ORDERED)) {
+            if (reloadedSession.getSessionState().equals(SessionState.ORDERED)) {
 
                 if ((liqpayCallbackResponse.getStatus().equalsIgnoreCase("success")
                         || liqpayCallbackResponse.getStatus().equalsIgnoreCase("sandbox"))) {

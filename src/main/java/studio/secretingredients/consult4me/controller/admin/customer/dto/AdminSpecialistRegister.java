@@ -50,6 +50,6 @@ public class AdminSpecialistRegister extends BaseTokenRequest{
     @NotNull
     private boolean active;
     @NotNull
-    private List<SpecialistSpecialisation> specialisations;
+    private List<Long> specialisations;
 
 }

@@ -19,10 +19,10 @@ public class Specialisation {
     @Id
     private long id;
 
-    @Enumerated(EnumType.STRING)
+    @ManyToOne
     private SpecialisationCategory specialisationCategory;
 
-    @Enumerated(EnumType.STRING)
+    @ManyToOne
     private SpecialisationType specialisationType;
 
     @ManyToMany(

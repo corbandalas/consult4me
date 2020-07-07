@@ -41,7 +41,7 @@ public class SpecialistUpdate extends BaseTokenRequest {
 
     private String lastName;
 
-    private List<SpecialistSpecialisation> specialisations;
+    private List<Long> specialisations;
 
     private String hashedPassword;
 

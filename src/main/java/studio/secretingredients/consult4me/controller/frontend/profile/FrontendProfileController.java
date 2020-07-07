@@ -137,9 +137,9 @@ public class FrontendProfileController {
             Set<Specialisation> specialisations = new HashSet<>();
 
             if (request.getSpecialisations() != null && request.getSpecialisations().size() > 0) {
-                for (SpecialistSpecialisation specialistSpecialisation : request.getSpecialisations()) {
+                for (Long specialistSpecialisation : request.getSpecialisations()) {
 
-                    Specialisation specialisation = specialisationService.findById(specialistSpecialisation.getId());
+                    Specialisation specialisation = specialisationService.findById(specialistSpecialisation);
 
                     specialisations.add(specialisation);
 

@@ -1,25 +1,27 @@
 package studio.secretingredients.consult4me.domain;
 
+import lombok.Data;
+
+import javax.persistence.*;
+
 /**
- * Specialisation category types enumeration
+ * Specialisation category types
  *
  * @author corbandalas - created 15.05.2020
  * @since 0.1.0
  */
 
-public enum SpecialisationType {
-    RELATION("RELATION"),
-    DEPRESSION("DEPRESSION"),
-    FAMILY_STRESS("FAMILY_STRESS")
-    ;
+@Data
+@Entity(name = "specialisation_type")
+public class SpecialisationType {
 
-    private String value;
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private long id;
 
-    SpecialisationType(String value) {
-        this.value = value;
-    }
+    @Column
+    private String name;
 
-    public String getValue() {
-        return value;
-    }
+    @Column
+    private String description;
 }

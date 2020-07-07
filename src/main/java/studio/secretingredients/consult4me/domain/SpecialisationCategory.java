@@ -1,5 +1,9 @@
 package studio.secretingredients.consult4me.domain;
 
+import lombok.Data;
+
+import javax.persistence.*;
+
 /**
  * Specialisation category enumeration
  *
@@ -7,17 +11,18 @@ package studio.secretingredients.consult4me.domain;
  * @since 0.1.0
  */
 
-public enum SpecialisationCategory {
-    PSYCHOLOGY("Психология"),
-    ;
+@Data
+@Entity(name = "specialisation_category")
+public class SpecialisationCategory {
 
-    private String value;
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    private long id;
 
-    SpecialisationCategory(String value) {
-        this.value = value;
-    }
+    @Column
+    private String name;
 
-    public String getValue() {
-        return value;
-    }
+    @Column
+    private String description;
+
 }

@@ -17,6 +17,7 @@ import java.util.List;
 public class Specialisation {
 
     @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;
 
     @ManyToOne
